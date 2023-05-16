@@ -11,7 +11,8 @@ dotenv.config();
 const { errorMiddleware } = require('./middleware/errorMiddleware');
 const connectDB = require('./config/database');
 
-var usersRouter = require('./routes/users');
+const userRouter = require('./routes/userRouter');
+const questionRouter = require('./routes/questionRouter')
 
 //  Connect DB
 connectDB();
@@ -30,7 +31,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', usersRouter);
+app.use('/user', userRouter);
+app.use('/question', questionRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
