@@ -35,7 +35,6 @@ function NavbarTop() {
           justifyContent: 'space-evenly',
         }}
       >
-
         <Link to="/">
           <Image style={{ borderRadius: 10 }} width={60} src={Logo} />
           Quiz
