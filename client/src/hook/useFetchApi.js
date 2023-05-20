@@ -5,7 +5,7 @@ export default function useFetchApi(url) {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
 
-const fetchData = async () => {
+  const fetchData = async () => {
     try {
       setLoading(true);
       const response = await fetch(url);
@@ -22,7 +22,7 @@ const fetchData = async () => {
   const authLogin = async (dataForm) => {
     try {
       setLoading(true);
-     const resp =  await fetch(url, {
+      const resp = await fetch(url, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

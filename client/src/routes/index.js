@@ -1,12 +1,12 @@
 import { HeaderOnly } from '../components/AppLayout';
 
 import Home from '../pages/Home';
-import Test from '../pages/Test';
 import SignIn from '../pages/SignIn';
+import EnterPIN from '../pages/Enter/EnterPIN';
 
 const publicRoutes = [
   { path: '/', component: Home },
-  { path: '/play', component: Test, layout: HeaderOnly },
+  { path: '/play', component: EnterPIN, layout: null, title: "Enter Game PIN" },
   { path: '/signin', component: SignIn, layout: HeaderOnly },
 ];
 
