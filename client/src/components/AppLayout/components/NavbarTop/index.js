@@ -9,22 +9,22 @@ function NavbarTop() {
   const items = [
     {
       key: 'home',
-      label: 'Home',
+      label: 'HOME',
       link: '/',
     },
     {
       key: 'play',
-      label: 'Play',
+      label: 'PLAY',
       link: '/play',
     },
     {
       key: 'room',
-      label: 'Room',
+      label: 'ROOM',
       link: '/room',
     },
     {
       key: 'about',
-      label: 'About',
+      label: 'ABOUT',
       link: '/about',
     },
   ];
