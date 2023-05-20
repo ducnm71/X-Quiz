@@ -1,0 +1,61 @@
+.container-form {
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: calc(100vh - 10vh);
+  background: url('../../assets/imgs/5771887_Background-1-03-min.png');
+  background-size: contain;
+  filter: brightness(90%);
+}
+
+.loginForm {
+  background-color: rgba(255, 255, 255, 0.33);
+  box-shadow: 0px, 8px, 32px 0 rgba(255, 255, 255, 0.33);
+  backdrop-filter: blur(3px);
+  padding: 0 24px 24px 24px;
+  border-radius: 16px;
+}
+
+.socialLogin {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 24px;
+  font-size: 24px;
+}
+
+.socialIcon {
+  cursor: pointer;
+}
+
+.socialIcon:nth-child(1) {
+  color: #DB4437;
+}
+
+.socialIcon:nth-child(2) {
+  color: #4267B2;
+}
+
+.socialIcon:nth-child(3) {
+  color: #211F1F;
+}
+
+.customCheckbox .ant-checkbox-inner {
+  width: 24px;
+  height: 24px;
+  font-size: 16px;
+}
+
+.homeIcon {
+    width: 24px;
+  height: 24px;
+  font-size: 16px;
+  color: #fff;
+  position: relative;
+}
