@@ -1,4 +1,4 @@
-.container-form {
+#singin-page {
   top: 0;
   right: 0;
   left: 0;
@@ -8,7 +8,7 @@
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: calc(100vh - 10vh);
+  height: 100vh;
   background: url('../../assets/imgs/5771887_Background-1-03-min.png');
   background-size: contain;
   filter: brightness(90%);
