@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import { publicRoutes } from './routes/index';
 import { DefaultLayout } from './components/AppLayout';
-import  Meta from './components/Meta';
+import Meta from './components/Meta';
 
 import UserAuthContext from './context/UserAuthContext';
 
@@ -18,7 +18,6 @@ function App() {
             let Layout = DefaultLayout;
             if (route.layout) {
               Layout = route.layout;
-              
             } else if (route.layout === null) {
               Layout = Fragment;
             }
@@ -29,7 +28,7 @@ function App() {
                 path={route.path}
                 element={
                   <Layout>
-                    <Meta title={route.title}/>
+                    <Meta title={route.title} />
                     <Page />
                   </Layout>
                 }
