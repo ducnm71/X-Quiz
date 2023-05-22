@@ -9,7 +9,7 @@ const publicRoutes = [
   { path: '/', component: HomePage, layout: DefaultLayout, title: 'Home' },
   { path: '/play', component: EnterPIN, layout: null, title: 'Enter Game PIN' },
   { path: '/room', component: RoomPage, layout: DefaultLayout, title: 'Room' },
-  { path: '/signin', component: SignIn, layout: HeaderOnly, title: 'Sign' },
+  { path: '/signin', component: SignIn, layout: null, title: 'Sign' },
 ];
 
 const privateRoutes = [];

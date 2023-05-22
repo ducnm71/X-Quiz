@@ -1,12 +1,12 @@
-import { useContext, createContext, useEffect, useState, useReducer } from 'react';
+import { useContext, createContext, useEffect, useReducer } from 'react';
 import Reducer from './Reducer';
 
 const initialState = {
   currentUser: null,
-  openLogin: false,
   loading: false,
-  alert: { open: false, severity: 'info', message: '' },
-  profile: { open: false, file: null, photoURL: '' },
+  // alert: { open: false, severity: 'info', message: '' },
+  profile: { name: '', photoURL: '' },
+  authLogin: false,
 };
 
 const Context = createContext(initialState);

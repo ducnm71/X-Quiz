@@ -3,10 +3,6 @@ import { Carousel } from 'antd';
 import './index.css';
 
 const HomePage = () => {
-  const handleSubscribe = (values) => {
-    console.log('Subscribe form submitted:', values);
-  };
-
   return (
     <div id="home-page">
       <Carousel waitForAnimate dots={false} autoplay effect="fade" className="homepage--slide">

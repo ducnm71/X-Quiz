@@ -6,13 +6,13 @@ const fetApi = async ({ url, method = 'POST', token = '', body = null }, dispatc
   try {
     const response = await fetch(url, { method, headers, ...body });
     const data = await response.json();
-    if (!data.success) {
-      if (response.status === 401) dispatch({ type: 'UPDATE_USER', payload: null });
+    if (!data) {
+      // if (response.status === 401) dispatch({ type: 'UPDATE_USER', payload: null });
       throw new Error(data.message);
     }
-    return data.result;
+    return data;
   } catch (error) {
-    dispatch({ type: 'UPDATE_ALERT', payload: { open: true, severity: 'error', message: error.message } });
+    // dispatch({ type: 'UPDATE_ALERT', payload: { open: true, severity: 'error', message: error.message } });
     console.log(error);
     return null;
   }

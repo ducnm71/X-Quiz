@@ -7,8 +7,10 @@ import {
   LockOutlined,
   UserOutlined,
   KeyOutlined,
+  RollbackOutlined,
 } from '@ant-design/icons';
 import { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
 import './index.css';
 
@@ -18,18 +20,32 @@ import { useValue } from '../../context/UserAuthContext';
 function SignIn() {
   const [isRegister, setIsRegister] = useState(false);
   const [title, setTitle] = useState('Login to your Account');
+  const navigate = useNavigate();
 
   const loginSocial = () => {
     message.success('Login Success!');
   };
 
-  const { dispatch } = useValue();
+  const {
+    state: { authLogin },
+    dispatch,
+  } = useValue();
 
-  const handleSubmit = (val) => {
+  const handleSubmit = async (val) => {
     if (!isRegister) {
-      return login(val, dispatch);
+      await login(val, dispatch);
+      if (!authLogin) {
+        // Xử lý thông báo lỗi đăng nhập không thành công hoặc các hành động khác ở đây
+        return;
+      }
+    } else {
+      await register(val, dispatch);
+      if (!authLogin) {
+        // Xử lý thông báo lỗi đăng ký không thành công hoặc các hành động khác ở đây
+        return;
+      }
     }
-    return register(val, dispatch);
+    navigate('/');
   };
 
   useEffect(() => {
@@ -47,6 +63,11 @@ function SignIn() {
 
   return (
     <div id="singin-page">
+      <div className="back-home">
+        <Link to="/">
+          <RollbackOutlined className="back-home__icon" />
+        </Link>
+      </div>
       <Form
         name="basic"
         style={{
@@ -55,25 +76,33 @@ function SignIn() {
         onFinish={handleSubmit}
         size={'large'}
         className="loginForm"
+        layout="vertical"
       >
         <Typography.Title style={{ textAlign: 'center', fontWeight: 700 }} level={1}>
           {title}
         </Typography.Title>
         {isRegister && (
           <Form.Item
+            className="form-item"
             rules={[
               {
                 required: true,
                 message: 'Please enter your name',
               },
             ]}
-            label={<UserOutlined />}
+            label={
+              <span>
+                <UserOutlined style={{ marginRight: 8 }} />
+                Name
+              </span>
+            }
             name="name"
           >
             <Input placeholder="Enter your name" />
           </Form.Item>
         )}
         <Form.Item
+          className="form-item"
           rules={[
             {
               required: true,
@@ -81,25 +110,37 @@ function SignIn() {
               message: 'Please enter valid email',
             },
           ]}
-          label={<MailOutlined />}
+          label={
+            <span>
+              <MailOutlined style={{ marginRight: 8 }} />
+              Email
+            </span>
+          }
           name="email"
         >
           <Input placeholder="Enter your email" />
         </Form.Item>
         <Form.Item
+          className="form-item"
           rules={[
             {
               required: true,
               message: 'Please enter your password',
             },
           ]}
-          label={<LockOutlined />}
+          label={
+            <span>
+              <LockOutlined style={{ marginRight: 8 }} />
+              Password
+            </span>
+          }
           name="password"
         >
           <Input.Password placeholder="Enter your password" />
         </Form.Item>
         {isRegister && (
           <Form.Item
+            className="form-item"
             rules={[
               {
                 required: true,
@@ -107,7 +148,12 @@ function SignIn() {
               },
               validatePassword,
             ]}
-            label={<KeyOutlined />}
+            label={
+              <span>
+                <KeyOutlined style={{ marginRight: 8 }} />
+                Confirm Password
+              </span>
+            }
             name="confirmPassword"
             dependencies={['password']}
             hasFeedback
@@ -125,7 +171,7 @@ function SignIn() {
         {/*>*/}
         {/*  <Checkbox className="customCheckbox" style={{fontSize: 20,}}>Remember me</Checkbox>*/}
         {/*</Form.Item>*/}
-        <Button type="primary" htmlType="submit" block>
+        <Button style={{ marginTop: 16 }} type="primary" htmlType="submit" block>
           {isRegister ? 'Register' : 'Login'}
         </Button>
         {!isRegister ? (
