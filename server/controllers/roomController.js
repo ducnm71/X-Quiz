@@ -15,7 +15,6 @@ const createZoom = asyncHandler(async(req, res) => {
     const {name} = req.body
     const userId = req.params.id
     const checkUser = await userModel.findById(userId).populate('rooms')
-    console.log(checkUser);
     const check = checkZoom(checkUser.rooms, name)
     
     if (check) {

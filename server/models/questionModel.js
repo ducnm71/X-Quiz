@@ -7,11 +7,11 @@ function arrLimit(val) {
 
 const questionSchema = new schema(
   {
-    user: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
-      required: true,
-    },
+    // user: {
+    //   type: mongoose.Schema.Types.ObjectId,
+    //   ref: 'User',
+    //   required: true,
+    // },
     title: {
       type: String,
       required: true,
