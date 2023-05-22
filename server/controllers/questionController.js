@@ -1,26 +1,37 @@
 const asyncHandler = require('express-async-handler');
 
 const questionSchema = require('../models/questionModel');
+const roomModel = require('../models/roomModel')
+
+const checkQues = (arr, input) => {
+  for (let i = 0; i < arr.length; i++){
+    if (arr[i].title === input){
+        return true
+    }
+  }
+  return false
+}
 
 const addQuestion = asyncHandler(async (req, res) => {
-  const { title, description, options, correctAnswer } = req.body;
-  const questionExists = await questionSchema.findOne({ title });
-  if (questionExists) {
+  const { title, description, options, answer } = req.body;
+  const roomId = req.params.id 
+  const checkRoom = await roomModel.findById(roomId).populate('questions');
+  const check = checkQues(checkRoom.questions, title)
+
+  if (check) {
     res.status(400);
     throw new Error('Question already exists');
-  }
-  const newQuestion = await questionSchema.create({user:req.user._id, title, description, options, correctAnswer });
-  if (newQuestion) {
-    res.status(201).json({
-      _id: newQuestion._id,
-      title: newQuestion.title,
-      description: newQuestion.description,
-      options: newQuestion.options,
-      correctAnswer: newQuestion.correctAnswer,
-    });
-  } else {
-    res.status(400);
-    throw new Error('Invalid input data');
+  }else {
+
+    const newQuestion = await questionSchema.create({title, description, options, answer });
+    if (newQuestion) {
+      checkRoom.questions.push(newQuestion._id)
+      await checkRoom.save()
+      res.status(201).json(newQuestion);
+    } else {
+      res.status(400);
+      throw new Error('Invalid input data');
+    }
   }
 });
 
