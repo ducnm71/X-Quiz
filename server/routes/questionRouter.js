@@ -4,7 +4,7 @@ const router = express.Router();
 const { addQuestion, getQuestions } = require('../controllers/questionController');
 const { protect } = require('../middleware/authMiddleware');
 
-router.post('/', protect, addQuestion);
+router.post('/addquestion/:id',addQuestion);
 router.get('/', getQuestions);
 
 module.exports = router;
