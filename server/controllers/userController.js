@@ -12,39 +12,43 @@ const getUsers = asyncHandler(async (req, res) => {
 /////
 const register = asyncHandler(async (req, res) => {
   const { name, email, password } = req.body;
-  const userExists = await userModel.findOne({ email });
+  const lowerCaseEmail = email.toLowerCase();
+  const userExists = await userModel.findOne({ email: lowerCaseEmail });
   if (userExists) {
-    res.status(400).json({ message: 'User account already exists' });
+    return res.status(400).json({ message: 'User account already exists' });
   }
-  const newUser = await userModel.create({ name, email, password });
+  const newUser = await userModel.create({ name, email: lowerCaseEmail, password });
   if (newUser) {
-    res.status(201).json({
+    return res.status(201).json({
       _id: newUser._id,
       name: newUser.name,
       email: newUser.email,
+      photoURL: newUser.photoURL,
       isAdmin: newUser.isAdmin,
       token: generateToken(newUser._id),
     });
   } else {
-    res.status(400).json({ message: 'Invalid input data' });
+    return res.status(400).json({ message: 'Invalid input data' });
   }
 });
 
 //
 const authLogin = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
-  const user = await userModel.findOne({ email });
+  const lowerCaseEmail = email.toLowerCase();
+  const user = await userModel.findOne({ email: lowerCaseEmail });
   if (user && (await bcrypt.compare(password, user.password))) {
-    res.json({
+    return res.json({
       _id: user._id,
       name: user.name,
       email: user.email,
       password: user.password,
+      photoURL: user.photoURL,
       isAdmin: user.isAdmin,
       token: generateToken(user._id),
     });
   } else {
-    res.status(401).json({ message: 'Email or password is incorrect' });
+    return res.status(401).json({ message: 'Email or password is incorrect' });
   }
 });
 
@@ -67,10 +71,11 @@ const updateUser = asyncHandler(async (req, res) => {
     user.password = newPassword;
   }
   const updatedUser = await user.save();
-  res.json({
+  return res.json({
     _id: updatedUser._id,
     name: updatedUser.name,
     email: updatedUser.email,
+    photoURL: newUser.photoURL,
     isAdmin: updatedUser.isAdmin,
     token: generateToken(updatedUser._id),
   });
@@ -92,6 +97,7 @@ const updateUserById = asyncHandler(async (req, res) => {
     name: updatedUser.name,
     email: updatedUser.email,
     password: updatedUser.password,
+    photoURL: newUser.photoURL,
     isAdmin: updatedUser.isAdmin,
   });
 });
