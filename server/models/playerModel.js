@@ -3,9 +3,9 @@ const schema = mongoose.Schema;
 
 const playerSchema = new schema({
   name: { type: String, required: true },
-  pin: {type: Number, required: true},
+  pin: {type: String},
   roomId: {type: mongoose.Schema.Types.ObjectId, ref:'Room'},
-  correctAnswers: {type: Number, required: true}
+  correctAnswers: {type: Number}
 });
 
 const Player = mongoose.model('Player', playerSchema)

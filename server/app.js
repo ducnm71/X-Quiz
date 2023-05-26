@@ -14,6 +14,7 @@ const connectDB = require('./config/database');
 const userRouter = require('./routes/userRouter');
 const questionRouter = require('./routes/questionRouter')
 const zoomRouter = require('./routes/zoomRouter')
+const playerRouter = require('./routes/playerRouter')
 
 //  Connect DB
 connectDB();
@@ -35,6 +36,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/user', userRouter);
 app.use('/question', questionRouter);
 app.use('/zoom', zoomRouter);
+app.use('/player', playerRouter)
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

@@ -1,6 +1,7 @@
 const asyncHandler = require('express-async-handler')
 const zoomModel = require('../models/roomModel')
 const userModel = require('../models/userModel')
+const playerModel = require('../models/playerModel')
 
 const checkZoom = (arr, input) => {
     for (let i = 0; i < arr.length; i++){
@@ -44,13 +45,27 @@ const getPin = asyncHandler(async(req,res) => {
     }
 
     checkZoom.pin = Math.random().toString(36).substring(2, 8)
+    await playerModel.deleteMany({roomId: checkZoom._id})
+    checkZoom.players = []
+    await checkZoom.save()
     res.status(200).json(checkZoom)
 
+})
+
+const deleteRoom = asyncHandler(async(req, res) => {
+    const result = await zoomModel.findByIdAndDelete(req.params.id)
+    if (result){
+        res.status(200).send('Delete successfully!')
+    }else {
+        res.status(200)
+        throw new Error('Delete failed!')
+    }
 })
 
 
 
 module.exports={
     createZoom,
-    getPin
+    getPin,
+    deleteRoom
 }
