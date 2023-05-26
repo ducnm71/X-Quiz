@@ -40,4 +40,16 @@ const getQuestions = asyncHandler(async (req, res) => {
   res.json(questions)
 })
 
-module.exports = { addQuestion, getQuestions };
+
+const deleteQuestion = asyncHandler(async(req, res) => {
+  const result = await questionSchema.findByIdAndDelete(req.params.id)
+  if (result){
+    res.status(201).send('Delete Successfully!')
+  }else {
+    res.status(401)
+    throw new Error('Delete failed!')
+  }
+})
+
+
+module.exports = { addQuestion, getQuestions, deleteQuestion };
