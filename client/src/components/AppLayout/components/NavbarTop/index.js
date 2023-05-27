@@ -1,13 +1,17 @@
 import React from 'react';
 import { Menu, Image, Button, Typography } from 'antd';
 import { Link } from 'react-router-dom';
+import {useSelector} from "react-redux";
 
 import './index.css';
 import Logo from '../../../../assets/imgs/logo.png';
-import { useValue } from '../../../../context/UserAuthContext';
-import UserIcon from '../../../user/UserIcon';
+import UserIcon from '../../../User/UserIcon';
 
 function NavbarTop() {
+
+  const user = useSelector((state) => state.user.user);
+  console.log(user, '2')
+
   const items = [
     {
       key: 'home',
@@ -31,10 +35,6 @@ function NavbarTop() {
     },
   ];
 
-  const {
-    state: { currentUser },
-  } = useValue();
-
   return (
     <React.Fragment>
       <div className="nav">
@@ -51,7 +51,7 @@ function NavbarTop() {
             </Menu.Item>
           ))}
         </Menu>
-        {!currentUser ? (
+        {!user ? (
           <Button className="btn-nav" type="primary" shape="round">
             <Link to="/signin"> Sign In </Link>
           </Button>

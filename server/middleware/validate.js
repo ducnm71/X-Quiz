@@ -6,10 +6,7 @@ const registerValidate = (req, res, next) => {
     name: Joi.string().required(),
     email: Joi.string().email().required(),
     password: Joi.string().min(8).required(),
-    confirmPassword: Joi.string()
-      .valid(Joi.ref('password'))
-      .required()
-      .messages('Confirm password must match the password'),
+    confirmPassword: Joi.string().valid(Joi.ref('password')).required(),
   });
   const { error } = schema.validate(data);
   if (error) return res.status(400).send(error.details[0].message);

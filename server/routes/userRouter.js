@@ -1,9 +1,19 @@
 const express = require('express');
 const router = express.Router();
 
-const { register, authLogin, updateUser, getUsers, deleted, updateUserById } = require('../controllers/userController');
+const {
+  register,
+  authLogin,
+  profileUser,
+  updateUser,
+  getUsers,
+  deleted,
+  updateUserById,
+} = require('../controllers/userController');
 const { protect, isAdmin } = require('../middleware/authMiddleware');
 const { registerValidate, loginValidate } = require('../middleware/validate');
+
+router.get('/profile', profileUser);
 
 router.get('/admin', protect, isAdmin, getUsers);
 router.post('/login', loginValidate, authLogin);

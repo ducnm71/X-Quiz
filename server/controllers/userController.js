@@ -1,7 +1,7 @@
 const asyncHandler = require('express-async-handler');
 const bcrypt = require('bcryptjs');
 
-const generateToken = require('../utils/generateToken');
+const { genrateAccessToken, decodedAccessToken } = require('../utils/generateToken');
 const userModel = require('../models/userModel');
 
 const getUsers = asyncHandler(async (req, res) => {
@@ -20,12 +20,7 @@ const register = asyncHandler(async (req, res) => {
   const newUser = await userModel.create({ name, email: lowerCaseEmail, password });
   if (newUser) {
     return res.status(201).json({
-      _id: newUser._id,
-      name: newUser.name,
-      email: newUser.email,
-      photoURL: newUser.photoURL,
-      isAdmin: newUser.isAdmin,
-      token: generateToken(newUser._id),
+      token: genrateAccessToken(newUser),
     });
   } else {
     return res.status(400).json({ message: 'Invalid input data' });
@@ -39,17 +34,20 @@ const authLogin = asyncHandler(async (req, res) => {
   const user = await userModel.findOne({ email: lowerCaseEmail });
   if (user && (await bcrypt.compare(password, user.password))) {
     return res.json({
-      _id: user._id,
-      name: user.name,
-      email: user.email,
-      password: user.password,
-      photoURL: user.photoURL,
-      isAdmin: user.isAdmin,
-      token: generateToken(user._id),
+      token: genrateAccessToken(user),
     });
   } else {
     return res.status(401).json({ message: 'Email or password is incorrect' });
   }
+});
+
+const profileUser = asyncHandler(async (req, res) => {
+  const bearerToken = req.get('Authorization');
+  const token = bearerToken.split(' ')[1];
+  const decoded = decodedAccessToken(token);
+  const { email } = decoded.data;
+  const user = await userModel.findOne({ email });
+  res.status(200).json(user);
 });
 
 //
@@ -77,7 +75,7 @@ const updateUser = asyncHandler(async (req, res) => {
     email: updatedUser.email,
     photoURL: newUser.photoURL,
     isAdmin: updatedUser.isAdmin,
-    token: generateToken(updatedUser._id),
+    token: genrateAccessToken(updatedUser._id),
   });
 });
 
@@ -115,6 +113,7 @@ module.exports = {
   getUsers,
   register,
   authLogin,
+  profileUser,
   updateUser,
   updateUserById,
   deleted,

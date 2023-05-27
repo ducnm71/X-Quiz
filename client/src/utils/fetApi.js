@@ -1,4 +1,5 @@
 const fetApi = async ({ url, method = 'POST', token = '', body = null }, dispatch) => {
+  console.log(!!token);
   const headers = token
     ? { 'Content-Type': 'application/json', authorization: `Bearer ${token}` }
     : { 'Content-type': 'application/json' };
@@ -6,15 +7,14 @@ const fetApi = async ({ url, method = 'POST', token = '', body = null }, dispatc
   try {
     const response = await fetch(url, { method, headers, ...body });
     const data = await response.json();
+    if (response.status === 401) throw new Error('The information that is being entered is not correct');
+
     if (!data) {
-      // if (response.status === 401) dispatch({ type: 'UPDATE_USER', payload: null });
-      throw new Error(data.message);
+      throw new Error('No content');
     }
     return data;
   } catch (error) {
-    // dispatch({ type: 'UPDATE_ALERT', payload: { open: true, severity: 'error', message: error.message } });
-    console.log(error);
-    return null;
+    throw new Error(error.message);
   }
 };
 

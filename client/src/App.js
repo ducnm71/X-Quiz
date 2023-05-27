@@ -6,38 +6,36 @@ import { publicRoutes } from './routes/index';
 import { DefaultLayout } from './components/AppLayout';
 import Meta from './components/Meta';
 
-import UserAuthContext from './context/UserAuthContext';
+
 
 function App() {
   return (
-    <UserAuthContext>
-      <Router>
-        <Routes>
-          {publicRoutes.map((route, index) => {
-            const Page = route.component;
-            let Layout = DefaultLayout;
-            if (route.layout) {
-              Layout = route.layout;
-            } else if (route.layout === null) {
-              Layout = Fragment;
-            }
+    <Router>
+      <Routes>
+        {publicRoutes.map((route, index) => {
+          const Page = route.component;
+          let Layout = DefaultLayout;
+          if (route.layout) {
+            Layout = route.layout;
+          } else if (route.layout === null) {
+            Layout = Fragment;
+          }
 
-            return (
-              <Route
-                key={index}
-                path={route.path}
-                element={
-                  <Layout>
-                    <Meta title={route.title} />
-                    <Page />
-                  </Layout>
-                }
-              />
-            );
-          })}
-        </Routes>
-      </Router>
-    </UserAuthContext>
+          return (
+            <Route
+              key={index}
+              path={route.path}
+              element={
+                <Layout>
+                  <Meta title={route.title} />
+                  <Page />
+                </Layout>
+              }
+            />
+          );
+        })}
+      </Routes>
+    </Router>
   );
 }
 
