@@ -1,25 +1,11 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import { Modal, Form, Input, Button, Upload, Avatar } from 'antd';
 import { CloseOutlined, UploadOutlined } from '@ant-design/icons';
 
-import { useValue } from '../../context/UserAuthContext';
-
 const Profile = () => {
-  const {
-    state: { profile, currentUser },
-    dispatch,
-  } = useValue();
+  const handleClose = () => {};
 
-  const handleClose = () => {
-    dispatch({ type: 'UPDATE_PROFILE', payload: { ...profile, open: false } });
-  };
-
-  const handleChange = (info) => {
-    if (info.file.status === 'done') {
-      const photoURL = URL.createObjectURL(info.file.originFileObj);
-      dispatch({ type: 'UPDATE_PROFILE', payload: { ...profile, file: info.file.originFileObj, photoURL } });
-    }
-  };
+  const handleChange = (info) => {};
 
   //   const handleSubmit = (values) => {
   //     const name = values.name;
@@ -27,8 +13,8 @@ const Profile = () => {
   //   };
 
   return (
-    <Modal centered width={300} visible={profile.open} onCancel={handleClose} footer={null}>
-      <Form initialValues={{ name: currentUser?.name }}>
+    <Modal centered width={360} visible onCancel={handleClose} footer={null}>
+      <Form initialValues>
         <Form.Item label="Name" name="name" rules={[{ required: true, message: 'Please enter your name' }]}>
           <Input />
         </Form.Item>
@@ -41,7 +27,7 @@ const Profile = () => {
             showUploadList={false}
             maxCount={1}
           >
-            <Avatar size={100} src={profile.photoURL} icon={<UploadOutlined />} />
+            <Avatar size={100} src icon={<UploadOutlined />} />
           </Upload>
         </Form.Item>
         <Form.Item>

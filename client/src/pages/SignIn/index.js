@@ -11,41 +11,26 @@ import {
 } from '@ant-design/icons';
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import {useDispatch} from "react-redux";
 
 import './index.css';
-
-import { login, register } from '../../actions/UserAction';
-import { useValue } from '../../context/UserAuthContext';
+import {loginUser} from "../../redux/authSlice";
 
 function SignIn() {
   const [isRegister, setIsRegister] = useState(false);
   const [title, setTitle] = useState('Login to your Account');
   const navigate = useNavigate();
+  const dispatch = useDispatch()
 
   const loginSocial = () => {
     message.success('Login Success!');
   };
 
-  const {
-    state: { authLogin },
-    dispatch,
-  } = useValue();
+  const role = window.localStorage.getItem('user')
+  const output = JSON.parse(role)
 
-  const handleSubmit = async (val) => {
-    if (!isRegister) {
-      await login(val, dispatch);
-      if (!authLogin) {
-        // Xử lý thông báo lỗi đăng nhập không thành công hoặc các hành động khác ở đây
-        return;
-      }
-    } else {
-      await register(val, dispatch);
-      if (!authLogin) {
-        // Xử lý thông báo lỗi đăng ký không thành công hoặc các hành động khác ở đây
-        return;
-      }
-    }
-    navigate('/');
+  const handleSubmit =  (val) => {
+    dispatch(loginUser(val))
   };
 
   useEffect(() => {
@@ -161,16 +146,6 @@ function SignIn() {
             <Input.Password placeholder="Enter password again" />
           </Form.Item>
         )}
-        {/*<Form.Item*/}
-
-        {/*    name="remember"*/}
-        {/*    valuePropName="checked"*/}
-        {/*    wrapperCol={{*/}
-        {/*      offset: 5,*/}
-        {/*    }}*/}
-        {/*>*/}
-        {/*  <Checkbox className="customCheckbox" style={{fontSize: 20,}}>Remember me</Checkbox>*/}
-        {/*</Form.Item>*/}
         <Button style={{ marginTop: 16 }} type="primary" htmlType="submit" block>
           {isRegister ? 'Register' : 'Login'}
         </Button>

@@ -12,8 +12,8 @@ const { errorMiddleware } = require('./middleware/errorMiddleware');
 const connectDB = require('./config/database');
 
 const userRouter = require('./routes/userRouter');
-const questionRouter = require('./routes/questionRouter')
-const zoomRouter = require('./routes/zoomRouter')
+const questionRouter = require('./routes/questionRouter');
+const zoomRouter = require('./routes/zoomRouter');
 
 //  Connect DB
 connectDB();
