@@ -1,12 +1,16 @@
+import { Layout, Space } from 'antd';
+
 import NavbarTop from '../components/NavbarTop';
-import './index.css';
 
 function HeaderOnly({ children }) {
+  const { Content } = Layout;
   return (
-    <div className="container">
-      <NavbarTop />
-      {children}
-    </div>
+    <Space direction="vertical" style={{ width: '100%' }} size={[0, 48]}>
+      <Layout>
+        <NavbarTop />
+        <Content>{children}</Content>
+      </Layout>
+    </Space>
   );
 }
 

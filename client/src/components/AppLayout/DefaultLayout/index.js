@@ -1,15 +1,18 @@
-import NavbarTop from '../components/NavbarTop';
-import Footer from '../components/Footer';
+import { Layout, Space } from 'antd';
 
-import './index.css';
+import NavbarTop from '../components/NavbarTop';
+import EndOfPage from '../components/EndOfPage';
 
 function DefaultLayout({ children }) {
+  const { Content } = Layout;
   return (
-    <div className="container">
-      <NavbarTop />
-      {children}
-      <Footer />
-    </div>
+    <Space direction="vertical" style={{ width: '100%' }} size={[0, 48]}>
+      <Layout>
+        <NavbarTop />
+        <Content>{children}</Content>
+        <EndOfPage />
+      </Layout>
+    </Space>
   );
 }
 

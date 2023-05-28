@@ -6,8 +6,6 @@ import { publicRoutes } from './routes/index';
 import { DefaultLayout } from './components/AppLayout';
 import Meta from './components/Meta';
 
-
-
 function App() {
   return (
     <Router>

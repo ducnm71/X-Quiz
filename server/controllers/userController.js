@@ -20,10 +20,11 @@ const register = asyncHandler(async (req, res) => {
   const newUser = await userModel.create({ name, email: lowerCaseEmail, password });
   if (newUser) {
     return res.status(201).json({
+      success: true,
       token: genrateAccessToken(newUser),
     });
   } else {
-    return res.status(400).json({ message: 'Invalid input data' });
+    return res.status(400).json({ success: false, message: 'Invalid input data' });
   }
 });
 
@@ -34,10 +35,11 @@ const authLogin = asyncHandler(async (req, res) => {
   const user = await userModel.findOne({ email: lowerCaseEmail });
   if (user && (await bcrypt.compare(password, user.password))) {
     return res.json({
+      success: true,
       token: genrateAccessToken(user),
     });
   } else {
-    return res.status(401).json({ message: 'Email or password is incorrect' });
+    return res.status(401).json({ success: false, message: 'Email or password is incorrect' });
   }
 });
 
