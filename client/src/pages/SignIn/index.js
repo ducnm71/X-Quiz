@@ -11,31 +11,31 @@ import {
 } from '@ant-design/icons';
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import {useDispatch} from "react-redux";
+import { useDispatch, useSelector } from 'react-redux';
 
-import './index.css';
-import {loginUser} from "../../redux/authSlice";
+import { login, register } from '../../redux/actions';
+import './style.css';
 
 function SignIn() {
   const [isRegister, setIsRegister] = useState(false);
   const [title, setTitle] = useState('Login to your Account');
   const navigate = useNavigate();
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
+  const token = useSelector((state) => state.auth.token);
+  const userProfile = useSelector((state) => state.profile);
 
   const loginSocial = () => {
     message.success('Login Success!');
   };
 
-  const role = window.localStorage.getItem('user')
-  const output = JSON.parse(role)
-
-  const handleSubmit =  (val) => {
-    dispatch(loginUser(val))
+  const handleSubmit = (val) => {
+    isRegister ? dispatch(register(val)) : dispatch(login(val));
   };
 
   useEffect(() => {
     isRegister ? setTitle('Create an account') : setTitle('Login to your Account');
-  }, [isRegister]);
+    token && navigate('/');
+  }, [isRegister, token]);
 
   const validatePassword = ({ getFieldValue }) => ({
     validator(_, value) {

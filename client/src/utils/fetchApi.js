@@ -1,4 +1,4 @@
-const fetApi = async ({ url, method = 'POST', token = '', body = null }, dispatch) => {
+const fetchApi = async ({ url, method = 'POST', token = '', body = null }, dispatch) => {
   console.log(!!token);
   const headers = token
     ? { 'Content-Type': 'application/json', authorization: `Bearer ${token}` }
@@ -18,4 +18,4 @@ const fetApi = async ({ url, method = 'POST', token = '', body = null }, dispatc
   }
 };
 
-export default fetApi;
+export default fetchApi;

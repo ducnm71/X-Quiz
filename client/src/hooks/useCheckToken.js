@@ -1,19 +1,21 @@
 import { useEffect } from 'react';
-import jwtDecode from 'jwt-decode';
+import { useDispatch, useSelector } from 'react-redux';
 
-// import { useValue } from '../context/UserAuthContext';
+import { fetchProfile } from '../redux/actions';
 
 const useCheckToken = () => {
-  // const {
-  //   state: { currentUser },
-  //   dispatch,
-  // } = useValue();
-  // useEffect(() => {
-  //   if (currentUser) {
-  //     const decodedToken = jwtDecode(currentUser.token);
-  //     if (decodedToken.exp * 1000 < new Date().getTime()) dispatch({ type: 'UPDATE_USER', payload: null });
-  //   }
-  // }, []);
+  const dispatch = useDispatch();
+  const token = useSelector((state) => state.user.token);
+
+  useEffect(() => {
+    const checkToken = () => {
+      if (token) {
+        dispatch(fetchProfile(token));
+      }
+    };
+
+    checkToken();
+  }, [token, dispatch]);
 };
 
 export default useCheckToken;

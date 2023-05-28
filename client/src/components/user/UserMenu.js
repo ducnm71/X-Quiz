@@ -1,11 +1,10 @@
 import { Menu, Dropdown } from 'antd';
 import { SettingOutlined, LogoutOutlined } from '@ant-design/icons';
+import { useSelector } from 'react-redux';
 import useCheckToken from '../../hooks/useCheckToken';
 import Profile from '../Profile';
 
 const UserMenu = ({ anchorUserMenu, setAnchorUserMenu }) => {
-  useCheckToken();
-
   const handleCloseUserMenu = () => {
     setAnchorUserMenu(null);
   };
@@ -13,6 +12,9 @@ const UserMenu = ({ anchorUserMenu, setAnchorUserMenu }) => {
   const handleMenuClick = ({ key }) => {
     handleCloseUserMenu();
   };
+
+  useCheckToken();
+  const userProfile = useSelector((state) => state.profile);
 
   const menu = (
     <Menu onClick={handleMenuClick}>
