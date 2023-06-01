@@ -5,9 +5,15 @@ import { Link } from 'react-router-dom';
 import './style.css';
 import Logo from '../../../../assets/imgs/logo.png';
 import UserIcon from '../../../User/UserIcon';
+import { useSelector } from 'react-redux';
+import useCheckToken from '../../../../hooks/useCheckToken';
+import { selectAccessToken, selectProfile } from '../../../../redux/selectors';
 
 function NavbarTop() {
   const { Header } = Layout;
+  useCheckToken();
+  const accessToken = useSelector(selectAccessToken);
+  const userProfile = useSelector(selectProfile);
 
   const items = [
     {
@@ -47,12 +53,12 @@ function NavbarTop() {
           </Menu.Item>
         ))}
       </Menu>
-      {!null ? (
+      {!accessToken ? (
         <Button className="btn-nav" type="primary" shape="round">
           <Link to="/signin"> Sign In </Link>
         </Button>
       ) : (
-        <UserIcon />
+        <UserIcon userProfile={userProfile} />
       )}
     </Header>
   );

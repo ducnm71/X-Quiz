@@ -1,4 +1,4 @@
-import fetchApi from '../utils/fetchApi';
+import { fetchApi } from '../utils/fetchApi';
 import {
   loginStart,
   loginSuccess,
@@ -26,6 +26,7 @@ export const login = (credentials) => async (dispatch) => {
     );
 
     dispatch(loginSuccess(data));
+    dispatch(fetchProfile());
   } catch (error) {
     dispatch(loginFailure(error.message));
   }
@@ -50,28 +51,23 @@ export const register = (userData) => async (dispatch) => {
   }
 };
 
-export const logout = () => (dispatch) => {
+export const logout = () => async (dispatch) => {
+  await fetchApi({ url: url + 'user/logout' });
   dispatch(logoutUser());
 };
 
 export const fetchProfile = () => async (dispatch, getState) => {
-  const { token } = getState().auth;
+  const { accessToken } = getState().auth;
 
   try {
     const data = await fetchApi(
       {
         url: url + 'user/profile',
         method: 'GET',
-        token,
+        token: accessToken,
       },
       dispatch,
     );
-
     dispatch(updateProfile(data));
   } catch (error) {}
 };
-
-export const selectIsLoggedIn = (state) => state.auth.token !== null;
-export const selectProfile = (state) => state.profile.profile;
-export const selectLoginLoading = (state) => state.auth.loading;
-export const selectLoginError = (state) => state.auth.error;

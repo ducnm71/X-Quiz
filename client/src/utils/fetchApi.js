@@ -18,4 +18,4 @@ const fetchApi = async ({ url, method = 'POST', token = '', body = null }, dispa
   }
 };
 
-export default fetchApi;
+module.exports = { fetchApi };
