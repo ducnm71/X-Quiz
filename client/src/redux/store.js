@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
-import authSlice from './authSlice';
+import authSlice, { loginSuccess } from './authSlice';
 import profileSlice from './profileSlice';
 
 const store = configureStore({
@@ -8,5 +8,9 @@ const store = configureStore({
     profile: profileSlice,
   },
 });
+const accessToken = localStorage.getItem('accessToken');
+if (accessToken) {
+  store.dispatch(loginSuccess({ accessToken }));
+}
 
 export default store;

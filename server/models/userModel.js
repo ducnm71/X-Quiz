@@ -8,12 +8,12 @@ const userSchema = new schema(
     email: { type: String, required: true },
     password: { type: String, required: true },
     photoURL: { type: String, default: '' },
-    isAdmin: {
-      type: Boolean,
-      required: true,
-      default: false,
-    },
     rooms: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Room' }],
+    roles: {
+      type: String,
+      enum: ['user', 'admin'],
+      default: 'user',
+    },
   },
   {
     timestamps: true,

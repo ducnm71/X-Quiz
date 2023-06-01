@@ -1,9 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 let initialState = {
-  token: null,
+  accessToken: null,
+  refreshToken: null,
   loading: false,
   error: null,
+  message: '',
 };
 
 const authSlice = createSlice({
@@ -15,11 +17,11 @@ const authSlice = createSlice({
       state.error = null;
     },
     loginSuccess: (state, action) => {
-      state.user = action.payload.user;
-      state.token = action.payload.token;
+      state.accessToken = action.payload.accessToken;
       state.loading = false;
       state.error = null;
-      localStorage.setItem('token', action.payload.token);
+      localStorage.setItem('accessToken', action.payload.accessToken);
+      localStorage.setItem('refreshToken', action.payload.refreshToken);
     },
     loginFailure: (state, action) => {
       state.loading = false;
@@ -30,11 +32,11 @@ const authSlice = createSlice({
       state.error = null;
     },
     registerSuccess: (state, action) => {
-      state.user = action.payload.user;
-      state.token = action.payload.token;
+      state.accessToken = action.payload.accessToken;
       state.loading = false;
       state.error = null;
-      localStorage.setItem('token', action.payload.token);
+      localStorage.setItem('accessToken', action.payload.accessToken);
+      localStorage.setItem('refreshToken', action.payload.refreshToken);
     },
     registerFailure: (state, action) => {
       state.loading = false;
@@ -42,8 +44,9 @@ const authSlice = createSlice({
     },
     logoutUser: (state) => {
       state.user = null;
-      state.token = null;
-      localStorage.removeItem('token');
+      state.accessToken = null;
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
     },
   },
 });

@@ -5,12 +5,11 @@ import { fetchProfile } from '../redux/actions';
 
 const useCheckToken = () => {
   const dispatch = useDispatch();
-  const token = useSelector((state) => state.user.token);
-
+  const token = useSelector((state) => state.auth.accessToken);
   useEffect(() => {
     const checkToken = () => {
       if (token) {
-        dispatch(fetchProfile(token));
+        dispatch(fetchProfile());
       }
     };
 

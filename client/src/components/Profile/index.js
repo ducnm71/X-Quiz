@@ -1,19 +1,12 @@
 import React from 'react';
 import { Modal, Form, Input, Button, Upload, Avatar } from 'antd';
-import { CloseOutlined, UploadOutlined } from '@ant-design/icons';
+import { UploadOutlined } from '@ant-design/icons';
 
-const Profile = () => {
-  const handleClose = () => {};
-
-  const handleChange = (info) => {};
-
-  //   const handleSubmit = (values) => {
-  //     const name = values.name;
-  //     updateProfile(currentUser, { name, file: profile.file }, dispatch);
-  //   };
+const Profile = ({ isModal, handleClose }) => {
+  // const handleChange = (info) => {};
 
   return (
-    <Modal centered width={360} visible onCancel={handleClose} footer={null}>
+    <Modal centered width={360} open={isModal} onCancel={handleClose} footer={null}>
       <Form initialValues>
         <Form.Item label="Name" name="name" rules={[{ required: true, message: 'Please enter your name' }]}>
           <Input />
@@ -23,7 +16,7 @@ const Profile = () => {
             style={{ marginLeft: 100 }}
             accept="image/*"
             beforeUpload={() => false}
-            onChange={handleChange}
+            // onChange={handleChange}
             showUploadList={false}
             maxCount={1}
           >

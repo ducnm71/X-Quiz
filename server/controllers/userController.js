@@ -1,8 +1,9 @@
 const asyncHandler = require('express-async-handler');
 const bcrypt = require('bcryptjs');
 
-const { genrateAccessToken, decodedAccessToken } = require('../utils/generateToken');
+const { genrateToken, decodedAccessToken } = require('../utils/generateToken');
 const userModel = require('../models/userModel');
+const userTokenModel = require('../models/userTokenModel');
 
 const getUsers = asyncHandler(async (req, res) => {
   const users = await userModel.find({});
@@ -19,9 +20,17 @@ const register = asyncHandler(async (req, res) => {
   }
   const newUser = await userModel.create({ name, email: lowerCaseEmail, password });
   if (newUser) {
+    const { accessToken, refreshToken } = await genrateToken(newUser);
+    res.cookie('refreshToken', refreshToken, {
+      httpOnly: true,
+      path: 'token/refresh',
+      maxAge: 30 * 24 * 60 * 60 * 1000,
+    });
     return res.status(201).json({
       success: true,
-      token: genrateAccessToken(newUser),
+      accessToken,
+      refreshToken,
+      message: 'Registered successfully',
     });
   } else {
     return res.status(400).json({ success: false, message: 'Invalid input data' });
@@ -30,16 +39,28 @@ const register = asyncHandler(async (req, res) => {
 
 //
 const authLogin = asyncHandler(async (req, res) => {
-  const { email, password } = req.body;
-  const lowerCaseEmail = email.toLowerCase();
-  const user = await userModel.findOne({ email: lowerCaseEmail });
-  if (user && (await bcrypt.compare(password, user.password))) {
-    return res.json({
-      success: true,
-      token: genrateAccessToken(user),
-    });
-  } else {
-    return res.status(401).json({ success: false, message: 'Email or password is incorrect' });
+  try {
+    const { email, password } = req.body;
+    const lowerCaseEmail = email.toLowerCase();
+    const user = await userModel.findOne({ email: lowerCaseEmail });
+    if (user && (await bcrypt.compare(password, user.password))) {
+      const { accessToken, refreshToken } = await genrateToken(user);
+      res.cookie('refreshToken', refreshToken, {
+        httpOnly: true,
+        path: 'token/refresh',
+        maxAge: 30 * 24 * 60 * 60 * 1000,
+      });
+      return res.json({
+        success: true,
+        accessToken,
+        refreshToken,
+        message: 'Logged in sucessfully',
+      });
+    } else {
+      return res.status(401).json({ success: false, message: 'Email or password is incorrect' });
+    }
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Internal Server Error' });
   }
 });
 
@@ -47,7 +68,7 @@ const profileUser = asyncHandler(async (req, res) => {
   const bearerToken = req.get('Authorization');
   const token = bearerToken.split(' ')[1];
   const decoded = decodedAccessToken(token);
-  const { email } = decoded.data;
+  const { email } = decoded.user;
   const user = await userModel.findOne({ email });
   res.status(200).json(user);
 });
@@ -75,9 +96,9 @@ const updateUser = asyncHandler(async (req, res) => {
     _id: updatedUser._id,
     name: updatedUser.name,
     email: updatedUser.email,
-    photoURL: newUser.photoURL,
-    isAdmin: updatedUser.isAdmin,
-    token: genrateAccessToken(updatedUser._id),
+    photoURL: updatedUser.photoURL,
+    role: updatedUser.role,
+    token: genrateToken(updatedUser._id),
   });
 });
 

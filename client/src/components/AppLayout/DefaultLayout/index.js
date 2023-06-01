@@ -1,12 +1,13 @@
 import { Layout, Space } from 'antd';
 
+import './style.css';
 import NavbarTop from '../components/NavbarTop';
 import EndOfPage from '../components/EndOfPage';
 
 function DefaultLayout({ children }) {
   const { Content } = Layout;
   return (
-    <Space direction="vertical" style={{ width: '100%' }} size={[0, 48]}>
+    <Space className="container" direction="vertical" style={{ width: '100%' }} size={[0, 48]}>
       <Layout>
         <NavbarTop />
         <Content>{children}</Content>
