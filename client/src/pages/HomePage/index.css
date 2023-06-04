@@ -18,9 +18,6 @@
     url('https://cdn.baogiaothong.vn/upload/2-2022/images/2022-05-25/1653446036-488-thumbnail-width740height555.jpg');
   background-repeat: no-repeat;
   background-size: cover;
-  /* position: absolute;
-    top: 0;
-    opacity: 0; */
 }
 
 .homepage--slide-2 {
@@ -30,9 +27,6 @@
     url('https://d1hjkbq40fs2x4.cloudfront.net/2016-01-31/files/1045-2.jpg');
   background-repeat: no-repeat;
   background-size: cover;
-  /* position: absolute;
-    top: 0;
-    opacity: 0; */
 }
 
 .homepage--slide-3 {
@@ -42,7 +36,86 @@
     url('https://www.elle.vn/wp-content/uploads/2017/07/25/hinh-anh-dep-1.jpg');
   background-repeat: no-repeat;
   background-size: cover;
-  /* position: absolute;
-    top: 0;
-    opacity: 0; */
+}
+
+.home-form-container {
+  position: absolute;
+  top: 250px;
+  width: 100%;
+}
+
+.home--description {
+  color: white;
+  width: 670px;
+  margin-left: 100px;
+}
+
+.home--desc__title {
+  font-size: 50px;
+  word-spacing: -3px;
+}
+
+.home--desc__subtitle {
+  color: #d8d7d6;
+  font-size: 18px;
+}
+
+.home--desc__btn {
+  width: 140px;
+  margin-right: 5px;
+  color: white;
+  margin-top: 20px;
+  height: 45px;
+  font-size: 18px;
+}
+
+.home--signUpForm-container {
+  position: absolute;
+  right: 100px;
+  top: -60px;
+}
+
+.home--signUpForm {
+  border-radius: 5px;
+  background-color: white;
+  width: 400px;
+  padding: 20px;
+}
+
+.home--signUpForm-title {
+  padding-top: 0;
+  margin-top: 0;
+  /* margin-bottom: 0; */
+  font-size: 29px;
+}
+
+.home--signUpForm__warningText {
+  margin-bottom: 10px;
+  color: rgb(151, 151, 151);
+  font-size: 16px;
+}
+
+.home--signUpForm__input {
+  margin-bottom: 10px;
+  height: 50px;
+}
+
+.home--signUpForm__input::placeholder {
+  color: rgb(151, 151, 151);
+  font-size: 16px;
+}
+
+.home--signUpForm__btn {
+  background-color: #f86e2f;
+  width: 100%;
+  height: 45px;
+  font-size: 18px;
+  color: white;
+  margin-top: 10px;
+}
+
+.home--signUpForm__privacy {
+  margin-top: 10px;
+  color: rgb(151, 151, 151);
+  font-size: 16px;
 }
