@@ -21,7 +21,6 @@ const authSlice = createSlice({
       state.loading = false;
       state.error = null;
       localStorage.setItem('accessToken', action.payload.accessToken);
-      localStorage.setItem('refreshToken', action.payload.refreshToken);
     },
     loginFailure: (state, action) => {
       state.loading = false;
@@ -36,7 +35,6 @@ const authSlice = createSlice({
       state.loading = false;
       state.error = null;
       localStorage.setItem('accessToken', action.payload.accessToken);
-      localStorage.setItem('refreshToken', action.payload.refreshToken);
     },
     registerFailure: (state, action) => {
       state.loading = false;
@@ -46,7 +44,6 @@ const authSlice = createSlice({
       state.user = null;
       state.accessToken = null;
       localStorage.removeItem('accessToken');
-      localStorage.removeItem('refreshToken');
     },
   },
 });

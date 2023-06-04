@@ -13,7 +13,7 @@ const refreshToken = asyncHandler(async (req, res) => {
     }
     const { tokenDetails } = verifyRefreshToken(refreshToken);
 
-    const payload = { _id: tokenDetails._id, roles: tokenDetails.roles };
+    const payload = tokenDetails.user;
     const accessToken = jwt.sign(payload, process.env.JWT_SECRET_ACCESS_TOKEN, {
       expiresIn: process.env.JWT_EXPRIRE_ACCESS_TOKEN,
     });

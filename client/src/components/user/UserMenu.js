@@ -59,7 +59,7 @@ const UserMenu = ({ userProfile, anchorUserMenu, setAnchorUserMenu }) => {
       <Dropdown overlay={menu} open={Boolean(anchorUserMenu)} onOpenChange={setAnchorUserMenu}>
         {userProfile && (
           <div>
-            <Profile isModal={isModal} handleClose={handleClose} />
+            <Profile isModal={isModal} userProfile={userProfile} handleClose={handleClose} />
           </div>
         )}
       </Dropdown>

@@ -58,7 +58,12 @@ function NavbarTop() {
           <Link to="/signin"> Sign In </Link>
         </Button>
       ) : (
-        <UserIcon userProfile={userProfile} />
+        <>
+          {/* <Link to="" style={{ color: '#4F5665', fontSize: 24, fontWeight: 700 }}>
+            CREATE ROOM
+          </Link> */}
+          <UserIcon userProfile={userProfile} />
+        </>
       )}
     </Header>
   );
