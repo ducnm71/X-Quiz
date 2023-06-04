@@ -1,9 +1,9 @@
 const asyncHandler = require('express-async-handler');
 const bcrypt = require('bcryptjs');
 
-const { genrateToken, decodedAccessToken } = require('../utils/generateToken');
+const { genrateToken, decodedAccessToken, generateAccessToken } = require('../utils/generateToken');
+const { refreshToken } = require('../controllers/refreshTokenController');
 const userModel = require('../models/userModel');
-const userTokenModel = require('../models/userTokenModel');
 
 const getUsers = asyncHandler(async (req, res) => {
   const users = await userModel.find({});
@@ -23,8 +23,8 @@ const register = asyncHandler(async (req, res) => {
     const { accessToken, refreshToken } = await genrateToken(newUser);
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
-      path: 'token/refresh',
       maxAge: 30 * 24 * 60 * 60 * 1000,
+      sameSite: true,
     });
     return res.status(201).json({
       success: true,
@@ -45,10 +45,11 @@ const authLogin = asyncHandler(async (req, res) => {
     const user = await userModel.findOne({ email: lowerCaseEmail });
     if (user && (await bcrypt.compare(password, user.password))) {
       const { accessToken, refreshToken } = await genrateToken(user);
+
       res.cookie('refreshToken', refreshToken, {
         httpOnly: true,
-        path: 'token/refresh',
         maxAge: 30 * 24 * 60 * 60 * 1000,
+        sameSite: true,
       });
       return res.json({
         success: true,
@@ -65,12 +66,48 @@ const authLogin = asyncHandler(async (req, res) => {
 });
 
 const profileUser = asyncHandler(async (req, res) => {
-  const bearerToken = req.get('Authorization');
-  const token = bearerToken.split(' ')[1];
-  const decoded = decodedAccessToken(token);
-  const { email } = decoded.user;
-  const user = await userModel.findOne({ email });
-  res.status(200).json(user);
+  try {
+    const bearerToken = req.get('Authorization');
+    const token = bearerToken.split(' ')[1];
+
+    let decoded;
+    try {
+      decoded = decodedAccessToken(token);
+    } catch (error) {
+      if (error.message.includes('jwt expired')) {
+        console.log(error.message.includes('jwt expired'));
+        const refreshToken = req.cookies.refreshToken;
+        console.log(refreshToken, '22');
+
+        if (!refreshToken) {
+          throw new Error('No refresh token provided');
+        }
+
+        const { accessToken } = await generateAccessToken(refreshToken);
+        console.log(accessToken, '222');
+
+        decoded = decodedAccessToken(accessToken);
+        console.log(decoded, '22');
+      } else {
+        throw error;
+      }
+    }
+
+    const { email } = decoded.user;
+    const user = await userModel.findOne({ email });
+
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    res.status(200).json(user);
+  } catch (error) {
+    if (error.message.includes('jwt expired')) {
+      res.status(401).json({});
+    } else {
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  }
 });
 
 //
