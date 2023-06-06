@@ -40,39 +40,34 @@
 
 .home-form-container {
   position: absolute;
-  top: 250px;
+  top: 80px;
   width: 100%;
+  height: 100vh;
 }
 
 .home--description {
   color: white;
-  width: 670px;
-  margin-left: 100px;
-}
-
-.home--desc__title {
-  font-size: 50px;
-  word-spacing: -3px;
+  padding-left: 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .home--desc__subtitle {
   color: #d8d7d6;
-  font-size: 18px;
+  font-size: 17px;
 }
 
 .home--desc__btn {
   width: 140px;
   margin-right: 5px;
   color: white;
-  margin-top: 20px;
-  height: 45px;
-  font-size: 18px;
 }
 
 .home--signUpForm-container {
-  position: absolute;
-  right: 100px;
-  top: -60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .home--signUpForm {
@@ -85,37 +80,20 @@
 .home--signUpForm-title {
   padding-top: 0;
   margin-top: 0;
-  /* margin-bottom: 0; */
-  font-size: 29px;
 }
 
 .home--signUpForm__warningText {
-  margin-bottom: 10px;
   color: rgb(151, 151, 151);
-  font-size: 16px;
-}
-
-.home--signUpForm__input {
-  margin-bottom: 10px;
-  height: 50px;
-}
-
-.home--signUpForm__input::placeholder {
-  color: rgb(151, 151, 151);
-  font-size: 16px;
 }
 
 .home--signUpForm__btn {
   background-color: #f86e2f;
   width: 100%;
-  height: 45px;
-  font-size: 18px;
   color: white;
-  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 .home--signUpForm__privacy {
-  margin-top: 10px;
   color: rgb(151, 151, 151);
   font-size: 16px;
 }
