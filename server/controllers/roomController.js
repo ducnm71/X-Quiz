@@ -62,7 +62,9 @@ const deleteRoom = asyncHandler(async(req, res) => {
     }
 })
 
-
+const pkayRoom = asyncHandler(async(req, res) => {
+    
+})
 
 module.exports={
     createZoom,
