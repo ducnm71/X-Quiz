@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
-
+const tokenLocal = localStorage.getItem('accessToken');
 let initialState = {
-  accessToken: null,
+  accessToken: tokenLocal ? tokenLocal : null,
   refreshToken: null,
   loading: false,
   error: null,
@@ -21,7 +21,6 @@ const authSlice = createSlice({
       state.loading = false;
       state.error = null;
       localStorage.setItem('accessToken', action.payload.accessToken);
-      localStorage.setItem('refreshToken', action.payload.refreshToken);
     },
     loginFailure: (state, action) => {
       state.loading = false;
@@ -36,21 +35,30 @@ const authSlice = createSlice({
       state.loading = false;
       state.error = null;
       localStorage.setItem('accessToken', action.payload.accessToken);
-      localStorage.setItem('refreshToken', action.payload.refreshToken);
     },
     registerFailure: (state, action) => {
       state.loading = false;
       state.error = action.payload;
     },
     logoutUser: (state) => {
-      state.user = null;
       state.accessToken = null;
       localStorage.removeItem('accessToken');
-      localStorage.removeItem('refreshToken');
+    },
+    updateAccessToken: (state, action) => {
+      state.accessToken = action.payload.accessToken;
+      localStorage.setItem('accessToken', action.payload.accessToken);
     },
   },
 });
-export const { loginStart, loginSuccess, loginFailure, registerStart, registerSuccess, registerFailure, logoutUser } =
-  authSlice.actions;
+export const {
+  loginStart,
+  loginSuccess,
+  loginFailure,
+  registerStart,
+  registerSuccess,
+  registerFailure,
+  logoutUser,
+  updateAccessToken,
+} = authSlice.actions;
 
 export default authSlice.reducer;

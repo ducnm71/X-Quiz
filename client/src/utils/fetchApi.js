@@ -1,21 +1,18 @@
-const fetchApi = async ({ url, method = 'POST', token = '', body = null }, dispatch) => {
-  console.log(!!token);
-  const headers = token
-    ? { 'Content-Type': 'application/json', authorization: `Bearer ${token}` }
-    : { 'Content-type': 'application/json' };
-  body = body ? { body: JSON.stringify(body) } : {};
+import axios from 'axios';
+
+axios.defaults.withCredentials = true;
+
+export const fetchApi = async ({ url, method = 'POST', token = '', body = null }, dispatch) => {
+  const headers = token ? { authorization: `Bearer ${token}` } : {};
+  body = body ? body : {};
   try {
-    const response = await fetch(url, { method, headers, ...body });
-    const data = await response.json();
-    if (response.status === 401) throw new Error('The information that is being entered is not correct');
+    const { data } = await axios({ url, method, headers, data: body });
 
     if (!data) {
       throw new Error('No content');
     }
     return data;
-  } catch (error) {
-    throw new Error(error.message);
+  } catch ({ message, response: { status } }) {
+    throw new Error(message);
   }
 };
-
-module.exports = { fetchApi };

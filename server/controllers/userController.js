@@ -1,9 +1,10 @@
 const asyncHandler = require('express-async-handler');
 const bcrypt = require('bcryptjs');
 
-const { genrateToken, decodedAccessToken } = require('../utils/generateToken');
+const { genrateToken, decodedAccessToken, generateAccessToken } = require('../utils/generateToken');
+const { refreshToken } = require('../controllers/refreshTokenController');
 const userModel = require('../models/userModel');
-const userTokenModel = require('../models/userTokenModel');
+const e = require('express');
 
 const getUsers = asyncHandler(async (req, res) => {
   const users = await userModel.find({});
@@ -23,8 +24,8 @@ const register = asyncHandler(async (req, res) => {
     const { accessToken, refreshToken } = await genrateToken(newUser);
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
-      path: 'token/refresh',
       maxAge: 30 * 24 * 60 * 60 * 1000,
+      sameSite: true,
     });
     return res.status(201).json({
       success: true,
@@ -45,10 +46,11 @@ const authLogin = asyncHandler(async (req, res) => {
     const user = await userModel.findOne({ email: lowerCaseEmail });
     if (user && (await bcrypt.compare(password, user.password))) {
       const { accessToken, refreshToken } = await genrateToken(user);
+
       res.cookie('refreshToken', refreshToken, {
         httpOnly: true,
-        path: 'token/refresh',
         maxAge: 30 * 24 * 60 * 60 * 1000,
+        sameSite: true,
       });
       return res.json({
         success: true,
@@ -65,12 +67,27 @@ const authLogin = asyncHandler(async (req, res) => {
 });
 
 const profileUser = asyncHandler(async (req, res) => {
-  const bearerToken = req.get('Authorization');
-  const token = bearerToken.split(' ')[1];
-  const decoded = decodedAccessToken(token);
-  const { email } = decoded.user;
-  const user = await userModel.findOne({ email });
-  res.status(200).json(user);
+  try {
+    const bearerToken = req.get('Authorization');
+    const token = bearerToken.split(' ')[1];
+    let decoded;
+    decoded = decodedAccessToken(token);
+    if (decoded?.exp * 1000 < Date.now()) {
+      throw new Error('jwt expired');
+    }
+    const { email } = decoded.user;
+    const user = await userModel.findOne({ email });
+
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(401).json({
+      msg: 'loi',
+    });
+  }
 });
 
 //

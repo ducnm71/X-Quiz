@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const UserToken = require('../models/userTokenModel');
+const verifyRefreshToken = require('./verifyRefreshToken');
 
 const { JWT_SECRET_ACCESS_TOKEN, JWT_SECRET_REFRESH_TOKEN, JWT_EXPRIRE_REFRESH_TOKEN, JWT_EXPRIRE_ACCESS_TOKEN } =
   process.env;
@@ -27,8 +28,30 @@ const genrateToken = async (user) => {
   }
 };
 
-const decodedAccessToken = (token) => {
-  return jwt.verify(token, JWT_SECRET_ACCESS_TOKEN);
+const generateAccessToken = async (refreshToken) => {
+  try {
+    const doc = await UserToken.findOne({ token: refreshToken }).exec();
+    if (!doc) {
+      throw { status: false, message: 'Invalid refresh token' };
+    }
+
+    const { tokenDetails } = verifyRefreshToken(refreshToken);
+    const payload = tokenDetails.user;
+    const accessToken = jwt.sign({ user: payload }, process.env.JWT_SECRET_ACCESS_TOKEN, {
+      expiresIn: process.env.JWT_EXPRIRE_ACCESS_TOKEN,
+    });
+
+    return {
+      accessToken,
+      message: 'Access token created successfully',
+    };
+  } catch (err) {
+    throw err;
+  }
 };
 
-module.exports = { genrateToken, decodedAccessToken };
+const decodedAccessToken = (token) => {
+  return jwt.decode(token, JWT_SECRET_ACCESS_TOKEN);
+};
+
+module.exports = { genrateToken, decodedAccessToken, generateAccessToken };

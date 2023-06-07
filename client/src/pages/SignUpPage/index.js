@@ -13,8 +13,8 @@ import { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { register } from '../../redux/actions';
-import { selectAccessToken } from '../../redux/selectors';
+import { register } from '~/redux/actions';
+import { selectAccessToken } from '~/redux/selectors';
 
 function SignUpPage() {
   const navigate = useNavigate();

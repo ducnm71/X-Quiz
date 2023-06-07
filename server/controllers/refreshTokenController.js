@@ -12,9 +12,13 @@ const refreshToken = asyncHandler(async (req, res) => {
       throw { status: false, message: 'Invalid refresh token' };
     }
     const { tokenDetails } = verifyRefreshToken(refreshToken);
+    if (tokenDetails?.exp * 1000 < Date.now()) {
+      throw new Error('jwt expired');
+    }
 
-    const payload = { _id: tokenDetails._id, roles: tokenDetails.roles };
-    const accessToken = jwt.sign(payload, process.env.JWT_SECRET_ACCESS_TOKEN, {
+    const payload = tokenDetails.user;
+
+    const accessToken = jwt.sign({ user: payload }, process.env.JWT_SECRET_ACCESS_TOKEN, {
       expiresIn: process.env.JWT_EXPRIRE_ACCESS_TOKEN,
     });
 

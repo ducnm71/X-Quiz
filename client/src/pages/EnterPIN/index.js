@@ -2,8 +2,8 @@ import React from 'react';
 import './index.css';
 import { Image, Input, Button } from 'antd';
 
-import EnterBackground from '../../assets/imgs/Enter.jpg';
-import logo from '../../assets/imgs/logo.png';
+import EnterBackground from '~/assets/imgs/Enter.jpg';
+import logo from '~/assets/imgs/logo.png';
 
 const EnterPIN = () => {
   return (
