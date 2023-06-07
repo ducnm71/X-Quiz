@@ -12,8 +12,8 @@ import {
 } from '@ant-design/icons';
 
 import './style.css';
-import { login } from '../../redux/actions';
-import { selectAccessToken } from '../../redux/selectors';
+import { login } from '~/redux/actions';
+import { selectAccessToken } from '~/redux/selectors';
 
 function SignInPage() {
   const navigate = useNavigate();

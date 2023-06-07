@@ -4,6 +4,7 @@ const bcrypt = require('bcryptjs');
 const { genrateToken, decodedAccessToken, generateAccessToken } = require('../utils/generateToken');
 const { refreshToken } = require('../controllers/refreshTokenController');
 const userModel = require('../models/userModel');
+const e = require('express');
 
 const getUsers = asyncHandler(async (req, res) => {
   const users = await userModel.find({});
@@ -69,30 +70,11 @@ const profileUser = asyncHandler(async (req, res) => {
   try {
     const bearerToken = req.get('Authorization');
     const token = bearerToken.split(' ')[1];
-
     let decoded;
-    try {
-      decoded = decodedAccessToken(token);
-    } catch (error) {
-      if (error.message.includes('jwt expired')) {
-        console.log(error.message.includes('jwt expired'));
-        const refreshToken = req.cookies.refreshToken;
-        console.log(refreshToken, '22');
-
-        if (!refreshToken) {
-          throw new Error('No refresh token provided');
-        }
-
-        const { accessToken } = await generateAccessToken(refreshToken);
-        console.log(accessToken, '222');
-
-        decoded = decodedAccessToken(accessToken);
-        console.log(decoded, '22');
-      } else {
-        throw error;
-      }
+    decoded = decodedAccessToken(token);
+    if (decoded?.exp * 1000 < Date.now()) {
+      throw new Error('jwt expired');
     }
-
     const { email } = decoded.user;
     const user = await userModel.findOne({ email });
 
@@ -102,11 +84,9 @@ const profileUser = asyncHandler(async (req, res) => {
 
     res.status(200).json(user);
   } catch (error) {
-    if (error.message.includes('jwt expired')) {
-      res.status(401).json({});
-    } else {
-      res.status(500).json({ error: 'Internal Server Error' });
-    }
+    res.status(401).json({
+      msg: 'loi',
+    });
   }
 });
 

@@ -3,7 +3,7 @@ import { Menu, Dropdown } from 'antd';
 import { SettingOutlined, LogoutOutlined } from '@ant-design/icons';
 import { useDispatch } from 'react-redux';
 import Profile from '../Profile';
-import { logout } from '../../redux/actions';
+import { logout } from '~/redux/actions';
 
 const UserMenu = ({ userProfile, anchorUserMenu, setAnchorUserMenu }) => {
   const [isModal, setIsModal] = useState(false);

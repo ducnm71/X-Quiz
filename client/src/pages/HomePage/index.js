@@ -3,6 +3,7 @@ import { Carousel, Button, Input } from 'antd';
 import './index.css';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import withAuth from '~/redux/withAuth';
 
 const HomePage = () => {
   // const [open, setOpen] = useState(false);
@@ -50,10 +51,10 @@ const HomePage = () => {
           <div className="home--signUpForm">
             <h1 className="home--signUpForm-title">Sign Up to create your free Game</h1>
             <div className="home--signUpForm__warningText">All fields are required*</div>
-            <Input placeHolder={'First name'} className="home--signUpForm__input" />
-            <Input placeHolder={'Last name'} className="home--signUpForm__input" />
-            <Input placeHolder={'Email address'} className="home--signUpForm__input" />
-            <Input placeHolder={'Phone number'} className="home--signUpForm__input" />
+            <Input placeHolder={'Name'} className="home--signUpForm__input" />
+            <Input placeHolder={'Email'} className="home--signUpForm__input" />
+            <Input placeHolder={'Password'} className="home--signUpForm__input" />
+            <Input placeHolder={'Confirm Password'} className="home--signUpForm__input" />
             <Button className="home--signUpForm__btn">Sign Up Now</Button>
             <div className="home--signUpForm__privacy">
               Your information will not be shared with anyone <Link>(See Privacy policy)</Link>
@@ -65,4 +66,4 @@ const HomePage = () => {
   );
 };
 
-export default HomePage;
+export default withAuth(false, HomePage);

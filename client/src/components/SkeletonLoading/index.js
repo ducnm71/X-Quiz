@@ -1,12 +1,7 @@
 import { Skeleton } from 'antd';
 
-import { useValue } from '../../context/UserAuthContext';
-
 function SkeletonLoading() {
-  const {
-    state: { loading },
-  } = useValue();
-  return <Skeleton active={loading} />;
+  return <Skeleton active />;
 }
 
 export default SkeletonLoading;

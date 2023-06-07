@@ -4,10 +4,10 @@ import { useSelector } from 'react-redux';
 import { Image, Input, Button } from 'antd';
 
 import './index.css';
-import InRoomBackground from '../../assets/imgs/InRoomBackground.png';
-import Avatar from '../../assets/imgs/Rectangle 278.png';
-import JoinGameQR from '../../assets/imgs/JoinGameQR.png';
-import { selectAccessToken } from '../../redux/selectors';
+import InRoomBackground from '~/assets/imgs/InRoomBackground.png';
+import Avatar from '~/assets/imgs/Rectangle 278.png';
+import JoinGameQR from '~/assets/imgs/JoinGameQR.png';
+import { selectAccessToken } from '~/redux/selectors';
 
 function RoomPage() {
   const [isHost, setIsHost] = useState(false);

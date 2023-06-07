@@ -1,7 +1,7 @@
 import { Col, Row, Typography, Image } from 'antd';
 
 import './style.css';
-import ImageAbout from '../../assets/imgs/logo.png';
+import ImageAbout from '~/assets/imgs/logo.png';
 
 function AboutPage() {
   const { Title, Paragraph } = Typography;
@@ -11,7 +11,7 @@ function AboutPage() {
         <Image width={500} src={ImageAbout} preview={false} />
       </Col>
       <Col span={12}>
-        <Title level={'h1'} style={{ margin: '0' }}>
+        <Title level={1} style={{ margin: '0' }}>
           Welcome to our team's web quiz!
         </Title>
         <br />
