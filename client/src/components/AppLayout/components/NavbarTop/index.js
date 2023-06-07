@@ -1,20 +1,19 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Menu, Image, Button, Typography, Layout } from 'antd';
 import { Link } from 'react-router-dom';
 
 import './style.css';
-import Logo from '../../../../assets/imgs/logo.png';
-import UserIcon from '../../../User/UserIcon';
+import Logo from '~/assets/imgs/logo.png';
+import UserIcon from '~/components/User/UserIcon';
 import { useSelector } from 'react-redux';
-import useCheckToken from '../../../../hooks/useCheckToken';
-import { selectAccessToken, selectProfile } from '../../../../redux/selectors';
+import { selectAccessToken, selectProfile } from '~/redux/selectors';
 
 function NavbarTop() {
   const { Header } = Layout;
-  useCheckToken();
-  const accessToken = useSelector(selectAccessToken);
   const userProfile = useSelector(selectProfile);
+  const accessToken = useSelector(selectAccessToken);
 
+  useEffect(() => {}, [userProfile]);
   const items = [
     {
       key: 'home',

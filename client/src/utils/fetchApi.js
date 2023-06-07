@@ -1,7 +1,5 @@
 import axios from 'axios';
 
-const urlRef = process.env.REACT_APP_SERVER_URL + 'token/refresh';
-
 axios.defaults.withCredentials = true;
 
 export const fetchApi = async ({ url, method = 'POST', token = '', body = null }, dispatch) => {
@@ -15,14 +13,6 @@ export const fetchApi = async ({ url, method = 'POST', token = '', body = null }
     }
     return data;
   } catch ({ message, response: { status } }) {
-    if (status === 401) {
-      const { data } = await axios({
-        url: urlRef,
-        method: 'get',
-      });
-      const { accessToken } = data;
-      console.log(accessToken);
-    }
     throw new Error(message);
   }
 };

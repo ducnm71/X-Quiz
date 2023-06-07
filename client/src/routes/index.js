@@ -1,12 +1,12 @@
-import { HeaderOnly, DefaultLayout } from '../components/AppLayout';
+import { HeaderOnly, DefaultLayout } from '~/components/AppLayout';
 
-import HomePage from '../pages/HomePage';
-import SignInPage from '../pages/SignInPage';
-import EnterPIN from '../pages/EnterPIN';
-import JoinGame from '../pages/JoinGame';
-import RoomPage from '../pages/RoomPage';
-import AboutPage from '../pages/AboutPage';
-import SignUpPage from '../pages/SignUpPage';
+import HomePage from '~/pages/HomePage';
+import SignInPage from '~/pages/SignInPage';
+import EnterPIN from '~/pages/EnterPIN';
+import JoinGame from '~/pages/JoinGame';
+import RoomPage from '~/pages/RoomPage';
+import AboutPage from '~/pages/AboutPage';
+import SignUpPage from '~/pages/SignUpPage';
 
 const publicRoutes = [
   { path: '/', component: HomePage, layout: DefaultLayout, title: 'Home' },

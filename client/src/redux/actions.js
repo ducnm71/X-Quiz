@@ -1,4 +1,4 @@
-import { fetchApi } from '../utils/fetchApi';
+import { fetchApi } from '~/utils/fetchApi';
 import {
   loginStart,
   loginSuccess,
@@ -7,6 +7,7 @@ import {
   registerSuccess,
   registerFailure,
   logoutUser,
+  updateAccessToken,
 } from './authSlice';
 import { updateProfile } from './profileSlice';
 
@@ -26,7 +27,6 @@ export const login = (credentials) => async (dispatch) => {
     );
 
     dispatch(loginSuccess(data));
-    dispatch(fetchProfile());
   } catch (error) {
     dispatch(loginFailure(error.message));
   }
@@ -70,4 +70,20 @@ export const fetchProfile = () => async (dispatch, getState) => {
     );
     dispatch(updateProfile(data));
   } catch (error) {}
+};
+
+export const fetchAccessToken = () => async (dispatch, getState) => {
+  try {
+    const data = await fetchApi(
+      {
+        url: url + 'token/refresh',
+        method: 'GET',
+      },
+      dispatch,
+    );
+
+    dispatch(updateAccessToken(data));
+  } catch (error) {
+    dispatch(updateAccessToken(null));
+  }
 };

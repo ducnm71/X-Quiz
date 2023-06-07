@@ -37,7 +37,7 @@ const generateAccessToken = async (refreshToken) => {
 
     const { tokenDetails } = verifyRefreshToken(refreshToken);
     const payload = tokenDetails.user;
-    const accessToken = jwt.sign(payload, process.env.JWT_SECRET_ACCESS_TOKEN, {
+    const accessToken = jwt.sign({ user: payload }, process.env.JWT_SECRET_ACCESS_TOKEN, {
       expiresIn: process.env.JWT_EXPRIRE_ACCESS_TOKEN,
     });
 
@@ -51,7 +51,7 @@ const generateAccessToken = async (refreshToken) => {
 };
 
 const decodedAccessToken = (token) => {
-  return jwt.verify(token, JWT_SECRET_ACCESS_TOKEN);
+  return jwt.decode(token, JWT_SECRET_ACCESS_TOKEN);
 };
 
 module.exports = { genrateToken, decodedAccessToken, generateAccessToken };
