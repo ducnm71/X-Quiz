@@ -1,20 +1,12 @@
-import {
-  Carousel,
-  Button,
-  Input,
-  Form,
-  Typography,
-  Col,
-  Row,
-} from 'antd';
+import { Carousel, Button, Input, Form, Typography, Col, Row } from 'antd';
 
 import './index.css';
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import withAuth from '~/redux/withAuth';
 
 const HomePage = () => {
-
+  // const [open, setOpen] = useState(false);
 
   return (
     <React.Fragment>
@@ -23,107 +15,75 @@ const HomePage = () => {
         <div className="homepage--slide-2 mySlide"></div>
         <div className="homepage--slide-3 mySlide"></div>
       </Carousel>
-      <Row
-        className='home-form-container'
-      >
-        <Col
-          span={12}
-          className='home--description'
-        >
+      <Row className="home-form-container">
+        <Col span={12} className="home--description">
           <Typography.Title
             style={{
-              color: "white",
+              color: 'white',
               fontSize: 50,
               wordSpacing: -3,
             }}
-            className='home--desc__title'
+            className="home--desc__title"
           >
             <span
               style={{
-                color: "#f86e2f"
-              }}>
+                color: '#f86e2f',
+              }}
+            >
               X-Quizz
-            </span> {""}
+            </span>{' '}
+            {''}
             is a smart choice for school, friends and family.
           </Typography.Title>
-          <Typography.Text
-            className='home--desc__subtitle'
-          >
-            What is X-Quizz!? X-Quizz! is a game-based learning platform that makes it easy to create,
-            share and play learning games or trivia quizzes in minutes.
-            Unleash the fun in classrooms, offices and living rooms!
+          <Typography.Text className="home--desc__subtitle">
+            What is X-Quizz!? X-Quizz! is a game-based learning platform that makes it easy to create, share and play
+            learning games or trivia quizzes in minutes. Unleash the fun in classrooms, offices and living rooms!
           </Typography.Text>
           <br />
           <div>
-            <Button
-              type={"primary"}
-              className='home--desc__btn'
-              size={'large'}
-            >
+            <Button type={'primary'} className="home--desc__btn" size={'large'}>
               Create Room
             </Button>
             <Button
-              type={"transparent"}
+              type={'transparent'}
               size={'large'}
               style={{
-                borderColor: "white",
-                borderWidth: 2
+                borderColor: 'white',
+                borderWidth: 2,
               }}
-              className='home--desc__btn'
+              className="home--desc__btn"
             >
               Play
             </Button>
           </div>
         </Col>
 
-        <Col
-          span={12}
-          className='home--signUpForm-container'
-        >
+        <Col span={12} className="home--signUpForm-container">
           <Form
-            className='home--signUpForm'
+            className="home--signUpForm"
             size={'large'}
             layout="vertical"
             style={{
-              height: 'fit-content'
+              height: 'fit-content',
             }}
           >
-            <Typography.Title
-              className='home--signUpForm-title'
-            >
-              Sign Up to create your free Game
-            </Typography.Title>
+            <Typography.Title className="home--signUpForm-title">Sign Up to create your free Game</Typography.Title>
             <Form.Item>
-              <Input
-                placeHolder={'First name'}
-                className='home--signUpForm__input'
-              />
+              <Input placeHolder={'First name'} className="home--signUpForm__input" />
             </Form.Item>
             <Form.Item>
-              <Input
-                placeHolder={'Last name'}
-                className='home--signUpForm__input'
-              />
+              <Input placeHolder={'Last name'} className="home--signUpForm__input" />
             </Form.Item>
             <Form.Item>
-              <Input
-                placeHolder={'Email address'}
-                className='home--signUpForm__input'
-              />
+              <Input placeHolder={'Email address'} className="home--signUpForm__input" />
             </Form.Item>
             <Form.Item>
-              <Input
-                placeHolder={'Phone number'}
-                className='home--signUpForm__input'
-              />
+              <Input placeHolder={'Phone number'} className="home--signUpForm__input" />
             </Form.Item>
-            <Button className='home--signUpForm__btn'>
-              Sign Up Now
-            </Button>
+            <Button className="home--signUpForm__btn">Sign Up Now</Button>
             <br />
-            <Typography.Text className='home--signUpForm__privacy'>
-              Your information will not be shared with anyone {" "}
-              <Link>(See Privacy policy)</Link>
+            <Typography.Text className="home--signUpForm__privacy">
+              Your information will not be shared with anyone <Link>(See Privacy policy)</Link>
             </Typography.Text>
           </Form>
         </Col>
