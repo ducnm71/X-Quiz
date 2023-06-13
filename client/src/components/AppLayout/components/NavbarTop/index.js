@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Menu, Image, Button, Typography, Layout } from 'antd';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import './style.css';
 import Logo from '~/assets/imgs/logo.png';
@@ -10,6 +10,7 @@ import { selectAccessToken, selectProfile } from '~/redux/selectors';
 
 function NavbarTop() {
   const { Header } = Layout;
+  const navigate = useNavigate();
   const userProfile = useSelector(selectProfile);
   const accessToken = useSelector(selectAccessToken);
 
@@ -26,16 +27,20 @@ function NavbarTop() {
       link: '/play',
     },
     {
-      key: 'room',
-      label: 'ROOM',
-      link: '/room',
-    },
-    {
       key: 'about',
       label: 'ABOUT',
       link: '/about',
     },
+    {
+      key: 'contact',
+      label: 'CONTACT',
+      link: '/contact',
+    },
   ];
+
+  const handleClick = () => {
+    navigate('/room');
+  };
 
   return (
     <Header className="nav">
@@ -58,9 +63,7 @@ function NavbarTop() {
         </Button>
       ) : (
         <>
-          {/* <Link to="" style={{ color: '#4F5665', fontSize: 24, fontWeight: 700 }}>
-            CREATE ROOM
-          </Link> */}
+          <Button onClick={handleClick}>CREATE ROOM</Button>
           <UserIcon userProfile={userProfile} />
         </>
       )}

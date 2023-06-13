@@ -12,11 +12,10 @@ function withAuth(isAuth, MyComponent) {
     useEffect(() => {
       const checkAccessTokenExpiration = () => {
         if (!accessToken) {
-          dispatch(logout());
+          return;
         } else {
           dispatch(fetchAccessToken());
         }
-
         dispatch(fetchProfile());
       };
 

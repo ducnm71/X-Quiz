@@ -16,7 +16,7 @@ const url = process.env.REACT_APP_SERVER_URL;
 export const login = (credentials) => async (dispatch) => {
   try {
     dispatch(loginStart());
-
+    console.log('1');
     const data = await fetchApi(
       {
         url: url + 'user/login',
@@ -25,9 +25,16 @@ export const login = (credentials) => async (dispatch) => {
       },
       dispatch,
     );
-
-    dispatch(loginSuccess(data));
+    console.log(data, '22222');
+    if (data.success) {
+      dispatch(loginSuccess(data));
+      return true;
+    } else {
+      dispatch(loginFailure(data));
+      return false;
+    }
   } catch (error) {
+    console.log('2');
     dispatch(loginFailure(error.message));
   }
 };
@@ -44,8 +51,13 @@ export const register = (userData) => async (dispatch) => {
       },
       dispatch,
     );
-
-    dispatch(registerSuccess(data));
+    if (data.success) {
+      dispatch(registerSuccess(data));
+      return true;
+    } else {
+      dispatch(registerFailure(data.error));
+      return false;
+    }
   } catch (error) {
     dispatch(registerFailure(error.message));
   }

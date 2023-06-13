@@ -18,12 +18,14 @@ const authSlice = createSlice({
     },
     loginSuccess: (state, action) => {
       state.accessToken = action.payload.accessToken;
+      state.message = action.payload.message;
       state.loading = false;
       state.error = null;
       localStorage.setItem('accessToken', action.payload.accessToken);
     },
     loginFailure: (state, action) => {
       state.loading = false;
+      state.message = action.payload.message;
       state.error = action.payload;
     },
     registerStart: (state) => {
@@ -32,6 +34,7 @@ const authSlice = createSlice({
     },
     registerSuccess: (state, action) => {
       state.accessToken = action.payload.accessToken;
+      state.message = action.payload.message;
       state.loading = false;
       state.error = null;
       localStorage.setItem('accessToken', action.payload.accessToken);

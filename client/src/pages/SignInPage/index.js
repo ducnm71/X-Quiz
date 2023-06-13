@@ -13,24 +13,44 @@ import {
 
 import './style.css';
 import { login } from '~/redux/actions';
-import { selectAccessToken } from '~/redux/selectors';
+import { selectAccessToken, selectMessage } from '~/redux/selectors';
 
 function SignInPage() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const accessToken = useSelector(selectAccessToken);
+  const messageNotificaiton = useSelector(selectMessage);
+
+  const validatePassword = ({ getFieldValue }) => ({
+    validator(_, value) {
+      if (!value || getFieldValue('password') === value) {
+        return Promise.resolve();
+      }
+      return Promise.reject('The two passwords you entered do not match!');
+    },
+  });
 
   const loginSocial = () => {
     message.success('Login Success!');
   };
 
-  const handleSubmit = (val) => {
-    dispatch(login(val));
+  const handleSubmit = async (val) => {
+    try {
+      const dispatchResult = await dispatch(login(val));
+      if (!dispatchResult) {
+        message.error(`${messageNotificaiton}`);
+      } else {
+        message.success(`${messageNotificaiton}`);
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      message.error('An error occurred during login');
+    }
   };
 
   useEffect(() => {
     if (accessToken) navigate('/');
-  }, [accessToken, navigate]);
+  }, [accessToken]);
 
   return (
     <div id="singin-page">
@@ -79,6 +99,7 @@ function SignInPage() {
               required: true,
               message: 'Please enter your password',
             },
+            validatePassword,
           ]}
           label={
             <span>
