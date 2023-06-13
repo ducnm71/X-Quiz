@@ -30,7 +30,6 @@ const register = asyncHandler(async (req, res) => {
     return res.status(201).json({
       success: true,
       accessToken,
-      refreshToken,
       message: 'Registered successfully',
     });
   } else {
@@ -55,7 +54,6 @@ const authLogin = asyncHandler(async (req, res) => {
       return res.json({
         success: true,
         accessToken,
-        refreshToken,
         message: 'Logged in sucessfully',
       });
     } else {

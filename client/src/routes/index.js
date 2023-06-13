@@ -6,6 +6,7 @@ import EnterPIN from '~/pages/EnterPIN';
 import JoinGame from '~/pages/JoinGame';
 import RoomPage from '~/pages/RoomPage';
 import AboutPage from '~/pages/AboutPage';
+import ContactPage from '~/pages/ContactPage';
 import SignUpPage from '~/pages/SignUpPage';
 
 const publicRoutes = [
@@ -14,6 +15,7 @@ const publicRoutes = [
   { path: '/join', component: JoinGame, layout: null, title: 'Join Game' },
   { path: '/room', component: RoomPage, layout: null, title: 'Room' },
   { path: '/about', component: AboutPage, layout: DefaultLayout, title: 'About Page' },
+  { path: '/contact', component: ContactPage, layout: DefaultLayout, title: 'About Page' },
   { path: '/signin', component: SignInPage, layout: null, title: 'Sign' },
   { path: '/signup', component: SignUpPage, layout: null, title: 'Sign Up' },
 ];

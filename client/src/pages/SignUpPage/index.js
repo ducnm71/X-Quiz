@@ -25,8 +25,20 @@ function SignUpPage() {
     message.success('Login Success!');
   };
 
-  const handleSubmit = (val) => {
-    dispatch(register(val));
+  const handleSubmit = async (val) => {
+    try {
+      const dispatchResult = await dispatch(register(val));
+
+      if (dispatchResult.error) {
+        message.error('Login failed');
+      } else {
+        await message.success('Register successful');
+        await message.success('Login successful');
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      message.error('An error occurred during login');
+    }
   };
 
   useEffect(() => {
@@ -35,10 +47,13 @@ function SignUpPage() {
 
   const validatePassword = ({ getFieldValue }) => ({
     validator(_, value) {
-      if (!value || getFieldValue('password') === value) {
+      if (value && value.length >= 8 && getFieldValue('password') === value) {
         return Promise.resolve();
       }
-      return Promise.reject('The two passwords you entered do not match!');
+      if (value && value.length >= 8) {
+        return Promise.reject('The two passwords you entered do not match!');
+      }
+      return Promise.reject('Password must be at least 8 characters');
     },
   });
 
@@ -106,6 +121,7 @@ function SignUpPage() {
               required: true,
               message: 'Please enter your password',
             },
+            validatePassword,
           ]}
           label={
             <span>
