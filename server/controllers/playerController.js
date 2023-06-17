@@ -2,6 +2,7 @@ const asyncHandler = require('express-async-handler');
 const roomModel = require('../models/roomModel');
 const playerModel = require('../models/playerModel');
 
+
 const joinRoom = asyncHandler(async (req, res) => {
   const pin = req.params.pin;
   const { name } = req.body;
@@ -22,6 +23,17 @@ const joinRoom = asyncHandler(async (req, res) => {
     res.status(400);
     throw new Error('Invalid input data');
   }
+
+    await playerModel.find({pin: pin}).toArray((err, players) => {
+        if(err) {
+            console.log(err);
+            return
+        }
+        _io.emit('updatePlayer', players)
+        return res.send(players)
+    })
 });
 
-module.exports = { joinRoom };
+
+module.exports = {joinRoom};
+
