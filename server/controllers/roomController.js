@@ -59,10 +59,8 @@ const deleteRoom = asyncHandler(async (req, res) => {
   }
 });
 
-
-
-module.exports={
-    createZoom,
-    getPin,
-    deleteRoom
-}
+module.exports = {
+  createZoom,
+  getPin,
+  deleteRoom,
+};
