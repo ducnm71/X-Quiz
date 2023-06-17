@@ -1,0 +1,17 @@
+.join-container {
+    width: 100vw;
+    height: 100vh;
+    background-size: 100% 100%;
+    margin: -8px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.name-input-container {
+    background-color: white;
+    padding: 15px;
+    border-radius: 5px;
+    width: 300px;
+}

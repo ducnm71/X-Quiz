@@ -4,9 +4,10 @@
  * Module dependencies.
  */
 
-var app = require('../app');
-var debug = require('debug')('server:server');
-var http = require('http');
+var app = require('../app').app;
+var debug = require('debug')('example-app:server');
+// const http = require('http')
+const httpServer = require('../app').httpServer
 
 /**
  * Get port from environment and store in Express.
@@ -19,15 +20,25 @@ app.set('port', port);
  * Create HTTP server.
  */
 
-var server = http.createServer(app);
+// var server = http.createServer(app);
 
+const socketApi = require('../socket/server.js')
+
+
+
+
+// module.exports={io}
 /**
  * Listen on provided port, on all network interfaces.
  */
 
-server.listen(port);
-server.on('error', onError);
-server.on('listening', onListening);
+httpServer.listen(port, () => {
+  console.log("app running on port " + port);
+});
+socketApi()
+httpServer.on('error', onError);
+httpServer.on('listening', onListening);
+
 
 /**
  * Normalize a port into a number, string, or false.
@@ -82,7 +93,7 @@ function onError(error) {
  */
 
 function onListening() {
-  var addr = server.address();
+  var addr = httpServer.address();
   var bind = typeof addr === 'string'
     ? 'pipe ' + addr
     : 'port ' + addr.port;

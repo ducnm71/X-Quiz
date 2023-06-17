@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Player List</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+    .container {
+      max-width: 400px;
+      margin: 0 auto;
+    }
+    .form-group {
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Fill form to join room</h1>
+    <form id="join-form">
+      <div class="form-group">
+        <label for="room-input">Room PIN:</label>
+        <input type="text" id="room-input" name="room">
+      </div>
+      <div class="form-group">
+        <label for="name-input">Player Name:</label>
+        <input type="text" id="name-input" name="playerName">
+      </div>
+      <button type="submit">Join</button>
+    </form>
+    <h2>Players in Room</h2>
+    <ul id="player-list" class="message-list"></ul>
+  </div>
+
+  <script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
+  <script>
+    var socket = io();
+
+    // Join room
+    const joinForm = document.getElementById('join-form');
+    const playerNameInput = document.getElementById('name-input');
+    const roomInput = document.getElementById('room-input');
+    joinForm.addEventListener('submit', function(event) {
+      event.preventDefault();
+      const playerName = playerNameInput.value;
+      const room = roomInput.value;
+      socket.emit('join', { playerName: playerName, room: room });
+    });
+
+    // Update player list
+    const playerList = document.getElementById('player-list');
+    socket.on('updatePlayers', function(players) {
+      playerList.innerHTML = '';
+      players.forEach(function(player) {
+        const listItem = document.createElement('li');
+        listItem.textContent = player;
+        playerList.appendChild(listItem);
+      });
+    });
+  </script>
+</body>
+</html>

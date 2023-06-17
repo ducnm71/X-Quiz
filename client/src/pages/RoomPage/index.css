@@ -1,0 +1,70 @@
+.room-container {
+    width: 100vw;
+    height: 100vh;
+    background-size: 100% 100%;
+    margin: -8px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+}
+
+.userInfor-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.user-name {
+    color: white;
+    font-size: 25px;
+    font-weight: 600;
+}
+
+.waiting-text {
+    color: white;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    font-size: 30px;
+    font-weight: 600;
+}
+
+.player-component {
+    display: flex;
+    position: relative;
+    top: -100px;
+}
+
+.host-container {
+    display: flex;
+    justify-content: center;
+    position: relative;
+    top: -100px
+}
+
+.game-pin {
+    height: 135px;
+    width: 320px;
+    background-color: white;
+    box-sizing: border-box;
+    padding: 10px 13px;
+    margin-right: 60px;
+    margin-left: 180px;
+}
+
+.game-pin > h4 {
+    margin: 0;
+    padding-left: 10px;
+    box-sizing: border-box;
+}
+
+.game-pin > h1 {
+    font-size: 60px;
+    font-weight: 800;
+    margin: 0;
+    padding: 5px 10px;
+    box-sizing: border-box;
+    background-color: #F2F2F2;
+}

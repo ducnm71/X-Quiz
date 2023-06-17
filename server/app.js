@@ -13,21 +13,37 @@ dotenv.config();
 const { errorMiddleware } = require('./middleware/errorMiddleware');
 const connectDB = require('./config/database');
 
+const refreshTokenRouter = require('./routes/refreshTokenRouter');
 const userRouter = require('./routes/userRouter');
-const questionRouter = require('./routes/questionRouter')
-const zoomRouter = require('./routes/zoomRouter')
-const playerRouter = require('./routes/playerRouter')
+const questionRouter = require('./routes/questionRouter');
+const zoomRouter = require('./routes/zoomRouter');
+const playerRouter = require('./routes/playerRouter');
+const clientRouter = require('./routes/clientRouter')
 
 //  Connect DB
 connectDB();
 
 var app = express();
+const {Server} = require('socket.io')
+const http = require('http')
+const httpServer = http.createServer(app)
+const io = new Server(httpServer)
+
+
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
+app.set('view engine', 'ejs');
 
-app.use(cors());
+app.use(
+  cors({
+    credentials: true,
+    origin: 'http://localhost:3000',
+    optionsSuccessStatus: 200,
+    methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
+  }),
+);
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -36,9 +52,11 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/user', userRouter);
+app.use('/token', refreshTokenRouter);
 app.use('/question', questionRouter);
 app.use('/zoom', zoomRouter);
-app.use('/player', playerRouter)
+app.use('/player', playerRouter);
+app.use('/', clientRouter)
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -48,4 +66,4 @@ app.use(function (req, res, next) {
 //error Middleware
 app.use(errorMiddleware);
 
-module.exports = app;
+module.exports = {app, httpServer, io};
