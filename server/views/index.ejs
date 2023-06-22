@@ -59,6 +59,9 @@
     socket.on('roomNotFound', () => {
       alert('Room not found');
     });
+    socket.on('existed' ,() => {
+      alert('This name has existed in room')
+    })
     // Update player list
     const playerList = document.getElementById('player-list');
     socket.on('updatePlayers', (players)=> {
@@ -88,7 +91,7 @@
 
       let answersHtml = '';
       for (var i = 0; i < answers.length; i++) {
-        answersHtml += '<li>' + answers[i] + '</li>';
+        answersHtml += '<li><label><input type="radio" name="answer" value="' + answers[i] + '">' + answers[i] + '</label></li>'
       }
       document.getElementById('answers').innerHTML = answersHtml;
     });
