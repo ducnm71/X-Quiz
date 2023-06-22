@@ -5,6 +5,6 @@ const { addQuestion, getQuestions } = require('../controllers/questionController
 const { protect } = require('../middleware/authMiddleware');
 
 router.post('/addquestion/:id',addQuestion);
-router.get('/', getQuestions);
+router.get('/getques/:pin', getQuestions);
 
 module.exports = router;
