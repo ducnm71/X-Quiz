@@ -17,7 +17,7 @@ const register = asyncHandler(async (req, res) => {
   const lowerCaseEmail = email.toLowerCase();
   const userExists = await userModel.findOne({ email: lowerCaseEmail });
   if (userExists) {
-    return res.status(400).json({ message: 'User account already exists' });
+    return res.status(401).json({ message: 'User account already exists' });
   }
   const newUser = await userModel.create({ name, email: lowerCaseEmail, password });
   if (newUser) {
@@ -70,6 +70,7 @@ const profileUser = asyncHandler(async (req, res) => {
     const token = bearerToken.split(' ')[1];
     let decoded;
     decoded = decodedAccessToken(token);
+
     if (decoded?.exp * 1000 < Date.now()) {
       throw new Error('jwt expired');
     }
@@ -83,7 +84,7 @@ const profileUser = asyncHandler(async (req, res) => {
     res.status(200).json(user);
   } catch (error) {
     res.status(401).json({
-      msg: 'loi',
+      message: 'jwt expired',
     });
   }
 });

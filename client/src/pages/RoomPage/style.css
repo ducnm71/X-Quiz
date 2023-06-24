@@ -1,0 +1,24 @@
+.container-room {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+}
+
+.nav-room {
+    background-color: #fff;
+    border-bottom: 1px solid #ccc;
+}
+
+.logo-nav-room {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* ANTD CSS */
+.ant-upload-list.ant-upload-list-picture-card {
+  display: flex;
+  justify-content: center;
+}

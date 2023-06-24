@@ -1,6 +1,7 @@
 import { HeaderOnly, DefaultLayout } from '~/components/AppLayout';
 
 import HomePage from '~/pages/HomePage';
+import HomePageAuth from '~/pages/HomePageAuth';
 import SignInPage from '~/pages/SignInPage';
 import EnterPIN from '~/pages/EnterPIN';
 import JoinGame from '~/pages/JoinGame';

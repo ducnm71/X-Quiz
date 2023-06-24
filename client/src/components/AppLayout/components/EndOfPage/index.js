@@ -1,5 +1,6 @@
-import { Layout } from 'antd';
-import { FacebookOutlined, TwitterOutlined, GithubOutlined, UserAddOutlined } from '@ant-design/icons';
+import { Layout, List, Typography } from 'antd';
+import { FacebookOutlined, GithubOutlined, GoogleOutlined } from '@ant-design/icons';
+import { Link } from 'react-router-dom';
 
 import './style.css';
 
@@ -10,25 +11,67 @@ function EndOfPage() {
     window.open(url);
   };
   return (
-    <Footer id="endOfPage" style={{ textAlign: 'center', borderTop: '1px solid #ccc' }}>
-      <div>
-        <FacebookOutlined
-          className="customIcon"
-          style={{ color: '#4267b2' }}
-          onClick={() => handleLinkClick('https://www.facebook.com')}
-        />
-        <TwitterOutlined
-          className="customIcon"
-          style={{ color: '#1DA1F2' }}
-          onClick={() => handleLinkClick('https://www.twitter.com')}
-        />
-        <GithubOutlined
-          className="customIcon"
-          style={{ color: '#211f1f' }}
-          onClick={() => handleLinkClick('https://www.github.com')}
-        />
+    <Footer style={{ borderTop: '1px solid #ccc' }}>
+      <div className="footer-container">
+        <div className="footer-row">
+          <div className="footer-column">
+            <h4>About</h4>
+            <ul>
+              <li>
+                <Link to="/">Company</Link>
+              </li>
+              <li>
+                <Link to="/">Service</Link>
+              </li>
+              <li>
+                <Link to="/">Blog</Link>
+              </li>
+              <li>
+                <Link to="/">Contact</Link>
+              </li>
+            </ul>
+          </div>
+          <div className="footer-column">
+            <h4>Application</h4>
+            <ul>
+              <li>
+                <Link to="/">At home</Link>
+              </li>
+              <li>
+                <Link to="/">At school</Link>
+              </li>
+              <li>
+                <Link to="/">At work</Link>
+              </li>
+            </ul>
+          </div>
+          <div className="footer-column">
+            <h4>Terms and conditions</h4>
+            <ul>
+              <li>
+                <Link to="/">Terms and conditions</Link>
+              </li>
+              <li>
+                <Link to="/">Privacy Policy</Link>
+              </li>
+            </ul>
+          </div>
+          <div className="footer-column">
+            <h4>Follow us</h4>
+            <div className="footer-social-links">
+              <FacebookOutlined
+                onClick={() => handleLinkClick('https://www.facebook.com')}
+                style={{ color: '#4267b2' }}
+              />
+              <GithubOutlined
+                onClick={() => handleLinkClick('https://www.github.com')}
+                style={{ color: '#211f1f', marginRight: 20, marginLeft: 20 }}
+              />
+              <GoogleOutlined onClick={() => handleLinkClick('https://www.google.com')} style={{ color: '#db4437' }} />
+            </div>
+          </div>
+        </div>
       </div>
-      <div>Quiz &copy; {new Date().getFullYear()}</div>
     </Footer>
   );
 }

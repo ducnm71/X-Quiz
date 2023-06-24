@@ -14,12 +14,13 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { register } from '~/redux/actions';
-import { selectAccessToken } from '~/redux/selectors';
+import { selectAccessToken, selectMessage } from '~/redux/selectors';
 
 function SignUpPage() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const accessToken = useSelector(selectAccessToken);
+  const messageNotificaiton = useSelector(selectMessage);
 
   const loginSocial = () => {
     message.success('Login Success!');
@@ -29,15 +30,15 @@ function SignUpPage() {
     try {
       const dispatchResult = await dispatch(register(val));
 
-      if (dispatchResult.error) {
-        message.error('Login failed');
+      if (!dispatchResult) {
+        message.error(`${messageNotificaiton}`);
       } else {
         await message.success('Register successful');
         await message.success('Login successful');
       }
     } catch (error) {
       console.error('Login error:', error);
-      message.error('An error occurred during login');
+      message.error(error);
     }
   };
 
