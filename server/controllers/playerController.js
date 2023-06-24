@@ -24,14 +24,14 @@ const joinRoom = asyncHandler(async (req, res) => {
     throw new Error('Invalid input data');
   }
 
-    await playerModel.find({pin: pin}).toArray((err, players) => {
-        if(err) {
-            console.log(err);
-            return
-        }
-        _io.emit('updatePlayer', players)
-        return res.send(players)
-    })
+    // await playerModel.find({pin: pin}).toArray((err, players) => {
+    //     if(err) {
+    //         console.log(err);
+    //         return
+    //     }
+    //     _io.emit('updatePlayer', players)
+    //     return res.send(players)
+    // })
 });
 
 

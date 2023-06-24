@@ -31,11 +31,19 @@
     </form>
     <h2>Players in Room</h2>
     <ul id="player-list" class="message-list"></ul>
+
+    <h1>Game</h1>
+    <button onclick="startQuiz()">Start</button>
+    <button onclick="stopQuiz()">Stop</button>
+    <h2 id="question"></h2>
+    <ul id="answers"></ul>
   </div>
 
   <script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
   <script>
-    var socket = io();
+    const socket = io();
+
+    
 
     // Join room
     const joinForm = document.getElementById('join-form');
@@ -43,20 +51,49 @@
     const roomInput = document.getElementById('room-input');
     joinForm.addEventListener('submit', function(event) {
       event.preventDefault();
-      const playerName = playerNameInput.value;
-      const room = roomInput.value;
-      socket.emit('join', { playerName: playerName, room: room });
+      const name = playerNameInput.value.trim();
+      const pin = roomInput.value.trim();
+      
+      socket.emit('join', { pin, name });
     });
-
+    socket.on('roomNotFound', () => {
+      alert('Room not found');
+    });
+    socket.on('existed' ,() => {
+      alert('This name has existed in room')
+    })
     // Update player list
     const playerList = document.getElementById('player-list');
-    socket.on('updatePlayers', function(players) {
+    socket.on('updatePlayers', (players)=> {
       playerList.innerHTML = '';
       players.forEach(function(player) {
         const listItem = document.createElement('li');
-        listItem.textContent = player;
+        listItem.textContent = player.name;
         playerList.appendChild(listItem);
       });
+    });
+
+     function startQuiz() {
+      const pin = roomInput.value.trim();
+      socket.emit('startQuiz', pin);
+    }
+
+    function stopQuiz() {
+      socket.emit('stopQuiz');
+    }
+
+    socket.on('question', function(data) {
+      let question = data.title;
+      let answers = data.options;
+
+      // Display the question and answers on the page
+      document.getElementById('question').innerHTML = question;
+
+      let answersHtml = '';
+      for (var i = 0; i < answers.length; i++) {
+        answersHtml += '<li><label><input type="radio" name="answer" value="' + answers[i] + '">' + answers[i] + '</label></li>'
+      }
+      document.getElementById('answers').innerHTML = answersHtml;
     });
   </script>
 </body>

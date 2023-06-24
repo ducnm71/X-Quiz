@@ -35,8 +35,15 @@ const addQuestion = asyncHandler(async (req, res) => {
 });
 
 const getQuestions = asyncHandler(async (req, res) => {
-  const questions = await questionSchema.find({});
-  res.json(questions);
+  const checkRoom = await roomModel.findOne({pin: req.params.pin}).populate('questions')
+  if(checkRoom){
+
+    const questions = checkRoom.questions
+    res.status(200).json(questions);
+  }else{
+    res.status(404)
+    throw new Error('failed')
+  }
 });
 
 const deleteQuestion = asyncHandler(async (req, res) => {

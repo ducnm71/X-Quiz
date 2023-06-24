@@ -49,18 +49,20 @@ const getPin = asyncHandler(async (req, res) => {
   res.status(200).json(checkZoom);
 });
 
-const deleteRoom = asyncHandler(async (req, res) => {
-  const result = await zoomModel.findByIdAndDelete(req.params.id);
-  if (result) {
-    res.status(200).send('Delete successfully!');
-  } else {
-    res.status(200);
-    throw new Error('Delete failed!');
-  }
-});
+const getRoom = asyncHandler(async (req, res) => {
+  try{
 
-module.exports = {
-  createZoom,
-  getPin,
-  deleteRoom,
-};
+    const result = await  zoomModel.findOne({pin: req.params.pin}).populate('players')
+    res.status(200).json(result)
+  }catch (err){
+    console.log(err);
+  }
+})
+
+
+
+module.exports={
+    createZoom,
+    getPin,
+    getRoom
+}
