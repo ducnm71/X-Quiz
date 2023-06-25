@@ -13,7 +13,7 @@ const checkQues = (arr, input) => {
 };
 
 const addQuestion = asyncHandler(async (req, res) => {
-  const { title, description, options, answer } = req.body;
+  const { title, description, options, correctAnswer } = req.body;
   const roomId = req.params.id;
   const checkRoom = await roomModel.findById(roomId).populate('questions');
   const check = checkQues(checkRoom.questions, title);
@@ -22,7 +22,7 @@ const addQuestion = asyncHandler(async (req, res) => {
     res.status(400);
     throw new Error('Question already exists');
   } else {
-    const newQuestion = await questionSchema.create({ title, description, options, answer });
+    const newQuestion = await questionSchema.create({ title, description, options, correctAnswer });
     if (newQuestion) {
       checkRoom.questions.push(newQuestion._id);
       await checkRoom.save();

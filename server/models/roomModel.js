@@ -6,7 +6,7 @@ const roomSchem = new schema({
   pin: { type: String, require: true },
   players: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Player' }],
   questions: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Question' }],
-  score: [{type: Number, require: true, default: false}]
+  userId: {type: mongoose.Schema.Types.ObjectId, require: true}
 });
 
 const Room = mongoose.model('Room', roomSchem);

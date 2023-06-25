@@ -16,7 +16,7 @@ const connectDB = require('./config/database');
 const refreshTokenRouter = require('./routes/refreshTokenRouter');
 const userRouter = require('./routes/userRouter');
 const questionRouter = require('./routes/questionRouter');
-const zoomRouter = require('./routes/zoomRouter');
+const roomRouter = require('./routes/roomRouter');
 const playerRouter = require('./routes/playerRouter');
 const clientRouter = require('./routes/clientRouter')
 
@@ -54,7 +54,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/user', userRouter);
 app.use('/token', refreshTokenRouter);
 app.use('/question', questionRouter);
-app.use('/zoom', zoomRouter);
+app.use('/room', roomRouter);
 app.use('/player', playerRouter);
 app.use('/', clientRouter)
 
