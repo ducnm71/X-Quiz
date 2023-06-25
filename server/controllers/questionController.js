@@ -35,14 +35,13 @@ const addQuestion = asyncHandler(async (req, res) => {
 });
 
 const getQuestions = asyncHandler(async (req, res) => {
-  const checkRoom = await roomModel.findOne({pin: req.params.pin}).populate('questions')
-  if(checkRoom){
-
-    const questions = checkRoom.questions
+  const checkRoom = await roomModel.findById(req.params.id).populate('questions');
+  if (checkRoom) {
+    const questions = checkRoom.questions;
     res.status(200).json(questions);
-  }else{
-    res.status(404)
-    throw new Error('failed')
+  } else {
+    res.status(404);
+    throw new Error('failed');
   }
 });
 

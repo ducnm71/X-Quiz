@@ -14,6 +14,7 @@ const checkZoom = (arr, input) => {
 
 const createRoom = asyncHandler(async (req, res) => {
   const { name } = req.body;
+  console.log(name);
   const userId = req.params.id;
   const checkUser = await userModel.findById(userId).populate('rooms');
   const check = checkZoom(checkUser.rooms, name);
@@ -29,7 +30,7 @@ const createRoom = asyncHandler(async (req, res) => {
       res.status(200).json(newRoom);
     } else {
       res.status(400);
-      throw new Error('Invalid data of zoom!')
+      throw new Error('Invalid data of zoom!');
     }
   }
 });
@@ -50,20 +51,17 @@ const getPin = asyncHandler(async (req, res) => {
 });
 
 const getRoom = asyncHandler(async (req, res) => {
-  try{
-
-    const userId = req.params.userid
-    const result = await roomModel.find({userId: userId})
-    res.status(200).json(result)
-  }catch (err){
+  try {
+    const userId = req.params.userid;
+    const result = await roomModel.find({ userId: userId });
+    res.status(200).json(result);
+  } catch (err) {
     console.log(err);
   }
-})
+});
 
-
-
-module.exports={
-    createRoom,
-    getPin,
-    getRoom
-}
+module.exports = {
+  createRoom,
+  getPin,
+  getRoom,
+};
