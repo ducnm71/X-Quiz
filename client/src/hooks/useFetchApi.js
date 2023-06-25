@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
+import { delay } from '~/utils/delay';
 
-export default function useFetchApi(url) {
+export default function useFetchApi(url, id) {
   const [fetched, setFetched] = useState(false);
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
@@ -8,7 +9,7 @@ export default function useFetchApi(url) {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const response = await fetch(url);
+      const response = await fetch(url + '/getroom/' + id);
       const respData = await response.json();
       setData(respData);
       setFetched(true);
@@ -22,37 +23,21 @@ export default function useFetchApi(url) {
   const createZoom = async (dataForm) => {
     try {
       setLoading(true);
-      const resp = await fetch(url, {
+      await fetch(url + '/createroom/' + id, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(dataForm),
+        body: JSON.stringify({ name: dataForm }),
       });
-      setData(resp);
+      await delay(2000);
+      await fetchData();
     } catch (e) {
       console.error(e);
     } finally {
       setLoading(false);
     }
   };
-
-  // const register = async (dataForm) => {
-  //   try {
-  //     setLoading(true);
-  //     await fetch(url, {
-  //       method: 'POST',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //       body: JSON.stringify(dataForm),
-  //     });
-  //   } catch (e) {
-  //     console.error(e);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // }
 
   useEffect(() => {
     fetchData();

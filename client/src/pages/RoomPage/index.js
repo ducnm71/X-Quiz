@@ -1,27 +1,22 @@
 import React from 'react';
-import { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Image, Button, Typography, Layout, Input, Col, Row, Space, Form, Modal } from 'antd';
+import { Button, Typography, Input, Col, Row, Form, Modal } from 'antd';
 
 import './style.css';
-import Logo from '~/assets/imgs/logo.png';
 import useFetchApi from '~/hooks/useFetchApi';
 import withAuth from '~/redux/withAuth';
 
 const RoomPage = () => {
-  const { Header, Content } = Layout;
   const { Title } = Typography;
 
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
-  const [roomName, setRoomName] = useState('');
   const [form] = Form.useForm();
   const url = process.env.REACT_APP_SERVER_URL;
   const id = localStorage.getItem('idUser');
-  console.log(id);
 
-  const { data, fetchData, createZoom } = useFetchApi(url);
+  const { data, createZoom } = useFetchApi(url + 'room', id);
 
   const showModal = () => {
     setOpen(true);
@@ -39,41 +34,25 @@ const RoomPage = () => {
     setConfirmLoading(true);
 
     const { name } = values;
-    setRoomName(name);
-
+    createZoom(name);
     setTimeout(() => {
       setOpen(false);
       setConfirmLoading(false);
-      //  navigate('/room');
     }, 2000);
   };
-  const arr = [
-    { id: '23123123' },
-    { id: 'dsaasdd' },
-    { id: 'dsaasdddasd' },
-    { id: '23123123' },
-    { id: 'dsaasdd' },
-    { id: 'dsaasdddasd' },
-    { id: 'dsaasdddasd' },
-    { id: 'dsaasdddasd' },
-    { id: 'dsaasdddasd' },
-    { id: 'dsaasdddasd' },
-  ];
 
   return (
     <div style={{ textAlign: 'center', marginTop: 60 }}>
       <Title style={{ marginBottom: 40 }}>Room Manager</Title>
       <Row>
-        {arr.map((item) => {
+        {data.map((item) => {
           return (
-            <Col span={6} offset={1} style={{ border: '1px solid #ccc', marginBottom: 10 }}>
-              <Link to={`/${item.id}/question`}>
-                {' '}
-                <Title level={3}>Name room</Title>
+            <Col key={item.id} span={6} offset={1} style={{ border: '1px solid #ccc', marginBottom: 10 }}>
+              <Link to={`/${item._id}/${item.name}/question`}>
+                <Title level={3}>{item.name}</Title>
               </Link>
-              <p>Number player</p>
-              <p>so cau hoi</p>
-              <p>diem cao nhat</p>
+              <p>Number of players: {item.players.length}</p>
+              <p>Number of questions: {item.questions.length}</p>
             </Col>
           );
         })}

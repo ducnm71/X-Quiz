@@ -1,44 +1,41 @@
-import { Form, Input, Row, Col, Button } from 'antd';
+import { Form, Input, Row, Col } from 'antd';
 
-function Question({ index, handleDeleteQuestion }) {
+function Question({ handleFinish, form }) {
   return (
-    <div style={{ width: '80%', border: '1px solid #ccc', padding: 10, marginBottom: 10 }}>
+    <Form form={form} onFinish={handleFinish} style={{ border: '1px solid #ccc', padding: 10, marginBottom: 10 }}>
       <Row>
-        <Col span={17}>
-          <Form.Item rules={[]} label={<span>Question {index}</span>} name="name">
+        <Col span={24}>
+          <Form.Item rules={[]} label={<span>Question </span>} name="description">
             <Input placeholder="" />
           </Form.Item>
         </Col>
       </Row>
       <Row style={{ marginTop: 10 }}>
-        <Col span={8}>
-          <Form.Item label={<span>Answer 1</span>} name="name">
+        <Col span={11}>
+          <Form.Item label={<span>Answer 1</span>} name="answer1">
             <Input placeholder="" />
           </Form.Item>
-          <Form.Item label={<span>Answer 3</span>} name="name">
+          <Form.Item label={<span>Answer 3</span>} name="answer3">
             <Input placeholder="" />
           </Form.Item>
         </Col>
-        <Col span={8} offset={1}>
-          <Form.Item label={<span>Answer 2</span>} name="name">
+        <Col span={11} offset={1}>
+          <Form.Item label={<span>Answer 2</span>} name="answer2">
             <Input placeholder="" />
           </Form.Item>
-          <Form.Item label={<span>Answer 4</span>} name="name">
+          <Form.Item label={<span>Answer 4</span>} name="answer4">
             <Input placeholder="" />
           </Form.Item>
         </Col>
       </Row>
       <Row>
-        <Col span={6}>
-          <Form.Item rules={[]} label={<span>Correct Answer(1-4)</span>} name="name">
+        <Col span={12}>
+          <Form.Item rules={[]} label={<span>Correct Answer(1-4)</span>} name="correct">
             <Input placeholder="" />
           </Form.Item>
         </Col>
-        <Col span={2} offset={9}>
-          <Button onClick={() => handleDeleteQuestion(index)}>Delete</Button>
-        </Col>
       </Row>
-    </div>
+    </Form>
   );
 }
 
