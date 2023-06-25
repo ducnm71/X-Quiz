@@ -2,6 +2,7 @@ import { Col, Row, Typography, Image } from 'antd';
 
 import './style.css';
 import ImageAbout from '~/assets/imgs/logo.png';
+import withAuth from '~/redux/withAuth';
 
 function AboutPage() {
   const { Title, Paragraph } = Typography;
@@ -42,4 +43,4 @@ function AboutPage() {
   );
 }
 
-export default AboutPage;
+export default withAuth(false, AboutPage);

@@ -10,6 +10,7 @@ const profileSlice = createSlice({
   reducers: {
     updateProfile: (state, action) => {
       state.profile = action.payload;
+      localStorage.setItem('idUser', action.payload._id);
     },
   },
 });

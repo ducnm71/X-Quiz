@@ -2,7 +2,7 @@ import { Form, Input, Row, Col, Button } from 'antd';
 
 function Question({ index, handleDeleteQuestion }) {
   return (
-    <div style={{ border: '1px solid #ccc', padding: 10, marginBottom: 10 }}>
+    <div style={{ width: '80%', border: '1px solid #ccc', padding: 10, marginBottom: 10 }}>
       <Row>
         <Col span={17}>
           <Form.Item rules={[]} label={<span>Question {index}</span>} name="name">

@@ -10,7 +10,7 @@ function DefaultLayout({ children }) {
     <Space className="container" direction="vertical" style={{ width: '100%' }} size={[0, 48]}>
       <Layout>
         <NavbarTop />
-        <Content>{children}</Content>
+        <Content style={{ height: '100vh', backgroundColor: '#fff' }}>{children}</Content>
         <EndOfPage />
       </Layout>
     </Space>
