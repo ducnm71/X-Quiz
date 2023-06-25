@@ -17,9 +17,9 @@ export default function useFetchApi(url) {
     } finally {
       setLoading(false);
     }
-  }
+  };
 
-  const authLogin = async (dataForm) => {
+  const createZoom = async (dataForm) => {
     try {
       setLoading(true);
       const resp = await fetch(url, {
@@ -29,7 +29,7 @@ export default function useFetchApi(url) {
         },
         body: JSON.stringify(dataForm),
       });
-      setData(resp)
+      setData(resp);
     } catch (e) {
       console.error(e);
     } finally {
@@ -37,26 +37,26 @@ export default function useFetchApi(url) {
     }
   };
 
-  const register = async (dataForm) => {
-    try {
-      setLoading(true);
-      await fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(dataForm),
-      });
-    } catch (e) {
-      console.error(e);
-    } finally {
-      setLoading(false);
-    }
-  }
+  // const register = async (dataForm) => {
+  //   try {
+  //     setLoading(true);
+  //     await fetch(url, {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify(dataForm),
+  //     });
+  //   } catch (e) {
+  //     console.error(e);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // }
 
   useEffect(() => {
     fetchData();
   }, []);
 
-  return { data, loading, fetched, setData, authLogin, register };
+  return { data, setData, createZoom };
 }
