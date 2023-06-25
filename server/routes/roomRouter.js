@@ -1,11 +1,11 @@
 const express = require('express')
 const router = express.Router()
 
-const {createZoom, getPin,getRoom} = require ('../controllers/roomController.js')
+const {createRoom, getPin,getRoom} = require ('../controllers/roomController.js')
 const {protect} = require('../middleware/authMiddleware.js')
 
-router.post('/createzoom/:id',createZoom)
+router.post('/createroom/:id',createRoom)
 router.get('/getpin/:id', getPin)
-router.get('/getroom/:pin', getRoom)
+router.get('/getroom/:userid', getRoom)
 
 module.exports = router
