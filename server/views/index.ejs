@@ -101,7 +101,7 @@
       socket.emit('stopQuiz');
     }
 
-    socket.on('question', function(data) {
+    socket.on('question', function(data, questionIndex) {
       let question = data.title;
       let answers = data.options;
 
@@ -113,11 +113,16 @@
         answersHtml += '<li><label><input type="radio" name="answer" value="' + answers[i] + '">' + answers[i] + '</label></li>'
       }
       document.getElementById('answers').innerHTML = answersHtml;
+
+      localStorage.setItem('qi', questionIndex)
     });
 
-    function answerQuestion() {
-      let selectedAnswerIndex = document.querySelector('input[name="answer"]:checked').value;
-      socket.emit('answer', selectedAnswerIndex);
+    async function answerQuestion() {
+      let selectedAnswerIndex = await document.querySelector('input[name="answer"]:checked').value;
+      let questionIndex  =  localStorage.getItem('qi')
+      let qi = parseInt(questionIndex) 
+      console.log(qi);
+      socket.emit('answer', {selectedAnswerIndex, qi});
     }
     socket.on('answerResult', function(result) {
       let resultMessage = result.isCorrect ? 'Correct! ' : 'Incorrect! ';
