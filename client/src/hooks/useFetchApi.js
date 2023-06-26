@@ -5,6 +5,7 @@ export default function useFetchApi(url, id) {
   const [fetched, setFetched] = useState(false);
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
+  const [dataPin, setDataPin] = useState([]);
 
   const fetchData = async () => {
     try {
@@ -39,9 +40,22 @@ export default function useFetchApi(url, id) {
     }
   };
 
+  const getPin = async (idRoom) => {
+    try {
+      setLoading(true);
+      const resp = await fetch(url + '/getpin/' + idRoom);
+      const respData = resp.json();
+      setDataPin(respData);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     fetchData();
   }, []);
 
-  return { data, setData, createZoom };
+  return { data, dataPin, setData, createZoom, getPin };
 }
