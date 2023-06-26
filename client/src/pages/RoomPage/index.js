@@ -1,8 +1,7 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Button, Typography, Input, Col, Row, Form, Modal, Layout } from 'antd';
-import { EditOutlined } from '@ant-design/icons';
+import { Link, useNavigate } from 'react-router-dom';
+import { Button, Typography, Input, Col, Row, Form, Modal } from 'antd';
 
 import './style.css';
 import useFetchApi from '~/hooks/useFetchApi';
@@ -10,6 +9,7 @@ import withAuth from '~/redux/withAuth';
 
 const RoomPage = () => {
   const { Title } = Typography;
+  const navigate = useNavigate();
 
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
@@ -42,8 +42,18 @@ const RoomPage = () => {
     }, 2000);
   };
 
+  const getPin = async (idRoom) => {
+    try {
+      const resp = await fetch(url + 'room/getpin/' + idRoom);
+      const respData = await resp.json();
+      await navigate('/play', { state: respData });
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   return (
-    <div style={{ margin: 80 }}>
+    <div style={{ margin: 30, padding: '24px 50px' }}>
       <Title style={{ marginBottom: 40, textAlign: 'center' }}>Room Manager</Title>
       <Button onClick={showModal} size="large" type="primary">
         New Room
@@ -51,7 +61,7 @@ const RoomPage = () => {
       <Row style={{ justifyContent: 'space-between' }}>
         {data.map((item) => {
           return (
-            <Col key={item.id} span={10} className="room-wrapper">
+            <Col key={item._id} span={10} className="room-wrapper">
               <Row className="room-wrapper__top">
                 <Link to={`/${item._id}/${item.name}/question`}>
                   <Title level={2}>{item.name}</Title>
@@ -64,10 +74,14 @@ const RoomPage = () => {
                 <p>
                   Number of questions: <strong>{item.questions.length}</strong>
                 </p>
-                <Button className="delete" type="light">
-                  Delete
-                </Button>
-                <Button type="primary">Start</Button>
+                <div>
+                  <Button className="delete" type="light">
+                    Delete
+                  </Button>
+                  <Button type="primary" onClick={() => getPin(item._id)}>
+                    Start
+                  </Button>
+                </div>
               </Row>
             </Col>
           );

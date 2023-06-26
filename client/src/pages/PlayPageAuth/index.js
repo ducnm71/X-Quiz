@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { Image, Input, Button } from 'antd';
+import { Image, Button } from 'antd';
+import { useLocation } from 'react-router-dom';
 
 import './index.css';
 import InRoomBackground from '~/assets/imgs/InRoomBackground.png';
@@ -12,11 +13,13 @@ import { selectAccessToken } from '~/redux/selectors';
 function PlayPageAuth() {
   const [isHost, setIsHost] = useState(false);
   const accessToken = useSelector(selectAccessToken);
+  const location = useLocation();
   useEffect(() => {
     if (accessToken) {
       setIsHost(true);
     }
   });
+  const dataPin = location.state;
   return (
     <React.Fragment>
       <div
@@ -30,7 +33,7 @@ function PlayPageAuth() {
             <div className="host-container">
               <div className="game-pin">
                 <h4>Game PIN:</h4>
-                <h1>513 9591</h1>
+                <h1>{dataPin.pin}</h1>
               </div>
               <Image src={JoinGameQR} width={135} />
               <Button
@@ -47,6 +50,22 @@ function PlayPageAuth() {
               >
                 Start
               </Button>
+              <Link to="/room">
+                <Button
+                  style={{
+                    width: 110,
+                    fontSize: 25,
+                    fontWeight: 700,
+                    height: 60,
+                    padding: 8,
+                    position: 'absolute',
+                    right: '10px',
+                    top: -50,
+                  }}
+                >
+                  Exit
+                </Button>
+              </Link>
             </div>
           </>
         ) : (
@@ -84,7 +103,7 @@ function PlayPageAuth() {
             src={Avatar}
             preview={false}
           />
-          <div className="user-name">Name</div>
+          <div className="user-name">{dataPin.name}</div>
         </div>
       </div>
     </React.Fragment>

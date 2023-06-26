@@ -1,0 +1,33 @@
+.nameroom-btn {
+  display: flex;
+  justify-content: space-between;
+}
+
+/* ANTD css */
+
+button.ant-btn.css-dev-only-do-not-override-ed5zg0.ant-btn-default.delete {
+  background: #c5280c;
+  font-weight: bold;
+  color: rgb(255, 255, 255);
+  box-shadow: rgba(0, 0, 0, 0.25) 0px -2px inset;
+}
+
+button.ant-btn.css-dev-only-do-not-override-ed5zg0.ant-btn-default.delete:hover {
+  background-color: #9f200a;
+  box-shadow: none;
+}
+
+button.ant-btn.css-dev-only-do-not-override-ed5zg0.ant-btn-default.add-question {
+    margin-right: 10px;
+}
+
+button.ant-btn.css-dev-only-do-not-override-ed5zg0.ant-btn-default.start {
+  background-color: rgb(19, 104, 206);
+  color: rgb(255, 255, 255);
+  font-weight: bold;
+}
+
+button.ant-btn.css-dev-only-do-not-override-ed5zg0.ant-btn-default.start:hover {
+  background-color: rgb(18, 96, 190);
+  box-shadow: rgba(0, 0, 0, 0.25) 0px -2px inset;
+}

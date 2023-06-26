@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Form, Button, Typography, Row, Col, Modal } from 'antd';
 
+import './style.css';
 import Question from '~/components/Question';
 import withAuth from '~/redux/withAuth';
 import useFetchApiQuestion from '~/hooks/useFetchQuestion';
@@ -41,14 +42,24 @@ function QuestionPage() {
   };
 
   return (
-    <div style={{ margin: 80 }}>
-      <Title level={3}>Room Name : {nameRoom}</Title>
-
+    <div style={{ margin: 30, padding: '24px 50px' }}>
+      <div className="nameroom-btn">
+        <Title level={3}>Room Name : {nameRoom}</Title>
+        <div>
+          <Button className="add-question" onClick={showModal}>
+            Add Question
+          </Button>
+          <Button className="start">Start</Button>
+        </div>
+      </div>
       {data.map((item) => {
         return (
           <div key={item._id}>
             <Title level={4}>
-              Câu {item.title} : {item.description} <Button onClick={() => deleteQuestion(item._id)}>Delete</Button>{' '}
+              Câu {item.title} : {item.description}{' '}
+              <Button className="delete" onClick={() => deleteQuestion(item._id)}>
+                Delete
+              </Button>{' '}
             </Title>
             <Row>
               <Col span={4}>
@@ -63,9 +74,7 @@ function QuestionPage() {
           </div>
         );
       })}
-      <Button style={{ marginBottom: 20, float: 'left' }} onClick={showModal}>
-        Add Question
-      </Button>
+
       <Modal title="Question" open={open} onCancel={handleCancel} confirmLoading={confirmLoading} onOk={handleOk}>
         <Question form={form} handleFinish={handleFinish} />
       </Modal>

@@ -7,7 +7,7 @@ import withAuth from '~/redux/withAuth';
 function AboutPage() {
   const { Title, Paragraph } = Typography;
   return (
-    <Row style={{ margin: 80 }} gutter={[0, 0]}>
+    <Row style={{ margin: 30, padding: '24px 50px' }} gutter={[0, 0]}>
       <Col span={12}>
         <Image width={500} src={ImageAbout} preview={false} />
       </Col>
