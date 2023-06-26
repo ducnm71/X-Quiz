@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Button, Typography, Input, Col, Row, Form, Modal } from 'antd';
+import { Button, Typography, Input, Col, Row, Form, Modal, Layout } from 'antd';
+import { EditOutlined } from '@ant-design/icons';
 
 import './style.css';
 import useFetchApi from '~/hooks/useFetchApi';
@@ -42,24 +43,36 @@ const RoomPage = () => {
   };
 
   return (
-    <div style={{ textAlign: 'center', marginTop: 60 }}>
-      <Title style={{ marginBottom: 40 }}>Room Manager</Title>
-      <Row>
+    <div style={{ margin: 80 }}>
+      <Title style={{ marginBottom: 40, textAlign: 'center' }}>Room Manager</Title>
+      <Button onClick={showModal} size="large" type="primary">
+        New Room
+      </Button>
+      <Row style={{ justifyContent: 'space-between' }}>
         {data.map((item) => {
           return (
-            <Col key={item.id} span={6} offset={1} style={{ border: '1px solid #ccc', marginBottom: 10 }}>
-              <Link to={`/${item._id}/${item.name}/question`}>
-                <Title level={3}>{item.name}</Title>
-              </Link>
-              <p>Number of players: {item.players.length}</p>
-              <p>Number of questions: {item.questions.length}</p>
+            <Col key={item.id} span={10} className="room-wrapper">
+              <Row className="room-wrapper__top">
+                <Link to={`/${item._id}/${item.name}/question`}>
+                  <Title level={2}>{item.name}</Title>
+                </Link>
+              </Row>
+              <Row className="room-wrapper__bot">
+                <p>
+                  Number of players: <strong>{item.players.length}</strong>
+                </p>
+                <p>
+                  Number of questions: <strong>{item.questions.length}</strong>
+                </p>
+                <Button className="delete" type="light">
+                  Delete
+                </Button>
+                <Button type="primary">Start</Button>
+              </Row>
             </Col>
           );
         })}
       </Row>
-      <Button onClick={showModal} size="large" type="primary">
-        New Room
-      </Button>
       <Modal title="Room" open={open} onCancel={handleCancel} confirmLoading={confirmLoading} onOk={handleOk}>
         <Form form={form} onFinish={handleFinish}>
           <Form.Item name="name" rules={[{ required: true, message: 'Please enter room name' }]}>

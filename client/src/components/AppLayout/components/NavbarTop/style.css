@@ -35,8 +35,20 @@
     height: 45px;
 }
 
-.room-nav {
-    color: #4F5665;
-    font-size: 24px;
-    font-weight: 700;
+
+
+/* ANTD CSS */
+
+.nav > button.ant-btn.css-dev-only-do-not-override-ed5zg0.ant-btn-primary {
+    box-shadow: rgba(0, 0, 0, 0.25) 0px -4px inset;
+    background: rgb(19, 104, 206);
+    color: rgb(255, 255, 255);
+    font-weight: bold;
+}
+
+.nav > button.ant-btn.css-dev-only-do-not-override-ed5zg0.ant-btn-primary:hover {
+    margin-top: 2px;
+    padding-bottom: 2px;
+    background-color: rgb(16, 87, 172);
+    box-shadow: rgba(0, 0, 0, 0.25) 0px -2px inset;
 }
