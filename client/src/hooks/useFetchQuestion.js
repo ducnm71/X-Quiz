@@ -44,10 +44,10 @@ export default function useFetchApiQuestion(url, id) {
     }
   };
 
-  const deleteQuestion = async (id) => {
+  const deleteQuestion = async (id, idRoom) => {
     try {
       setLoading(true);
-      await fetch(url + `/${id}`, {
+      await fetch(url + `/${id}/${idRoom}`, {
         method: 'DELETE',
       });
       await fetchQuestion();

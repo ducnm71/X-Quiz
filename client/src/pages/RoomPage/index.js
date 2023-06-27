@@ -46,7 +46,7 @@ const RoomPage = () => {
     try {
       const resp = await fetch(url + 'room/getpin/' + idRoom);
       const respData = await resp.json();
-      await navigate('/play', { state: respData });
+      await navigate('/start', { state: respData });
     } catch (e) {
       console.error(e);
     }

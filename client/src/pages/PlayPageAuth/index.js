@@ -19,7 +19,7 @@ function PlayPageAuth() {
       setIsHost(true);
     }
   });
-  const dataPin = location.state;
+  const data = location.state;
   return (
     <React.Fragment>
       <div
@@ -33,7 +33,7 @@ function PlayPageAuth() {
             <div className="host-container">
               <div className="game-pin">
                 <h4>Game PIN:</h4>
-                <h1>{dataPin.pin}</h1>
+                <h1>{data.pin}</h1>
               </div>
               <Image src={JoinGameQR} width={135} />
               <Button
@@ -103,7 +103,7 @@ function PlayPageAuth() {
             src={Avatar}
             preview={false}
           />
-          <div className="user-name">{dataPin.name}</div>
+          <div className="user-name">{data.name}</div>
         </div>
       </div>
     </React.Fragment>

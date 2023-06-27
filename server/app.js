@@ -6,8 +6,6 @@ var logger = require('morgan');
 const dotenv = require('dotenv');
 const cors = require('cors');
 
-
-
 dotenv.config();
 
 const { errorMiddleware } = require('./middleware/errorMiddleware');
@@ -18,19 +16,18 @@ const userRouter = require('./routes/userRouter');
 const questionRouter = require('./routes/questionRouter');
 const roomRouter = require('./routes/roomRouter');
 const playerRouter = require('./routes/playerRouter');
-const clientRouter = require('./routes/clientRouter')
+const clientRouter = require('./routes/clientRouter');
 
 //  Connect DB
 connectDB();
 
 var app = express();
-const {Server} = require('socket.io')
-const http = require('http')
-const httpServer = http.createServer(app)
-const io = new Server(httpServer)
-
-
-
+const { Server } = require('socket.io');
+const http = require('http');
+const httpServer = http.createServer(app);
+const io = new Server(httpServer, {
+  cors: 'http://localhost:3000',
+});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -56,7 +53,7 @@ app.use('/token', refreshTokenRouter);
 app.use('/question', questionRouter);
 app.use('/room', roomRouter);
 app.use('/player', playerRouter);
-app.use('/', clientRouter)
+app.use('/', clientRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -66,4 +63,4 @@ app.use(function (req, res, next) {
 //error Middleware
 app.use(errorMiddleware);
 
-module.exports = {app, httpServer, io};
+module.exports = { app, httpServer, io };

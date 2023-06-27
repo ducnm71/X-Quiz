@@ -1,16 +1,17 @@
 import { useState } from 'react';
-import { Form, Button, Typography, Row, Col, Modal } from 'antd';
+import { Form, Button, Typography, Row, Modal } from 'antd';
+import { useNavigate } from 'react-router-dom';
 
 import './style.css';
 import Question from '~/components/Question';
 import withAuth from '~/redux/withAuth';
 import useFetchApiQuestion from '~/hooks/useFetchQuestion';
-import { options } from 'toastr';
 
 function QuestionPage() {
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [form] = Form.useForm();
+  const navigate = useNavigate();
   const url = process.env.REACT_APP_SERVER_URL + 'question';
 
   const idRoom = window.location.pathname.split('/')[1];
@@ -42,7 +43,15 @@ function QuestionPage() {
     }, 2000);
   };
 
-  console.log(data);
+  const handleGetPin = async (id) => {
+    try {
+      const resp = await fetch(process.env.REACT_APP_SERVER_URL + 'room/getpin/' + id);
+      const respData = await resp.json();
+      await navigate('/start', { state: respData });
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
   return (
     <div style={{ margin: 30, padding: '24px 50px' }}>
@@ -52,7 +61,9 @@ function QuestionPage() {
           <Button className="add-question" onClick={showModal}>
             Add Question
           </Button>
-          <Button className="start">Start</Button>
+          <Button className="start" onClick={() => handleGetPin(idRoom)}>
+            Start
+          </Button>
         </div>
       </div>
       {data.map((item) => {
@@ -60,7 +71,7 @@ function QuestionPage() {
           <div key={item._id}>
             <Title level={4}>
               Câu {item.title} : {item.description}{' '}
-              <Button className="delete" onClick={() => deleteQuestion(item._id)}>
+              <Button className="delete" onClick={() => deleteQuestion(item._id, idRoom)}>
                 Delete
               </Button>{' '}
             </Title>
