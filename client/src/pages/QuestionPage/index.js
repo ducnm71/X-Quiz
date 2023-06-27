@@ -5,6 +5,7 @@ import './style.css';
 import Question from '~/components/Question';
 import withAuth from '~/redux/withAuth';
 import useFetchApiQuestion from '~/hooks/useFetchQuestion';
+import { options } from 'toastr';
 
 function QuestionPage() {
   const [open, setOpen] = useState(false);
@@ -41,6 +42,8 @@ function QuestionPage() {
     }, 2000);
   };
 
+  console.log(data);
+
   return (
     <div style={{ margin: 30, padding: '24px 50px' }}>
       <div className="nameroom-btn">
@@ -61,16 +64,19 @@ function QuestionPage() {
                 Delete
               </Button>{' '}
             </Title>
-            <Row>
-              <Col span={4}>
-                <Paragraph>A: {item.options[0]}</Paragraph>
-                <Paragraph>C: {item.options[2]}</Paragraph>
-              </Col>
-              <Col span={4}>
-                <Paragraph>B: {item.options[1]}</Paragraph>
-                <Paragraph>D: {item.options[3]}</Paragraph>
-              </Col>
-            </Row>
+            {item.options.map((option, index) => (
+              <Row key={index}>
+                <Paragraph style={{ color: item.correctAnswer === index + 1 ? 'rgb(226, 27, 60)' : 'inherit' }}>
+                  {index === 0
+                    ? `A: ${option}`
+                    : index === 1
+                    ? `B: ${option}`
+                    : index === 2
+                    ? `C: ${option}`
+                    : `D: ${option}`}
+                </Paragraph>
+              </Row>
+            ))}
           </div>
         );
       })}
@@ -82,4 +88,4 @@ function QuestionPage() {
   );
 }
 
-export default withAuth(false, QuestionPage);
+export default withAuth(true, QuestionPage);

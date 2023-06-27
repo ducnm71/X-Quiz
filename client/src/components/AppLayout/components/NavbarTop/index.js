@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Menu, Image, Button, Typography, Layout, Modal, Form, Input } from 'antd';
+import { Menu, Image, Button, Typography, Layout } from 'antd';
 import { Link, useNavigate } from 'react-router-dom';
 
 import './style.css';
@@ -66,13 +66,6 @@ function NavbarTop() {
           <Button type="primary" onClick={handleClick}>
             ROOM
           </Button>
-          {/* <Modal title="Room" open={open} onCancel={handleCancel} confirmLoading={confirmLoading} onOk={handleOk}>
-            <Form form={form} onFinish={handleFinish}>
-              <Form.Item name="name" rules={[{ required: true, message: 'Please enter room name' }]}>
-                <Input placeholder="Please enter room name" />
-              </Form.Item>
-            </Form>
-          </Modal> */}
           <UserIcon userProfile={userProfile} />
         </>
       )}
