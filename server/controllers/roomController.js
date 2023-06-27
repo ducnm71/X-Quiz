@@ -14,7 +14,6 @@ const checkZoom = (arr, input) => {
 
 const createRoom = asyncHandler(async (req, res) => {
   const { name } = req.body;
-  console.log(name);
   const userId = req.params.id;
   const checkUser = await userModel.findById(userId).populate('rooms');
   const check = checkZoom(checkUser.rooms, name);
@@ -60,8 +59,18 @@ const getRoom = asyncHandler(async (req, res) => {
   }
 });
 
+const deleteRoom = asyncHandler(async (req, res) => {
+  const idroom = req.params.idroom;
+  const checkRoom = await roomModel.findByIdAndDelete(idroom);
+  if (!checkRoom) {
+    res.status(401).json({ msg: 'Delete failed!' });
+  }
+  res.status(201).json({ msg: 'Delete Successfully!' });
+});
+
 module.exports = {
   createRoom,
   getPin,
   getRoom,
+  deleteRoom,
 };
