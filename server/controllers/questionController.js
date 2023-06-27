@@ -46,9 +46,15 @@ const getQuestions = asyncHandler(async (req, res) => {
 });
 
 const deleteQuestion = asyncHandler(async (req, res) => {
-  const result = await questionSchema.findByIdAndDelete(req.params.id);
-  if (result) {
-    res.status(201).send('Delete Successfully!');
+  const question = await questionSchema.findByIdAndDelete(req.params.quesId);
+  console.log(question);
+  const room = await roomModel.findById(req.params.roomId);
+  room.questions = room.questions.filter((id) => id != req.params.quesId)
+
+  await room.save()
+
+  if (room.questions) {
+    res.status(201).json(room.questions);
   } else {
     res.status(401);
     throw new Error('Delete failed!');
