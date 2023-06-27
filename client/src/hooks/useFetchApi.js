@@ -1,62 +1,52 @@
 import { useEffect, useState } from 'react';
+import { delay } from '~/utils/delay';
 
-export default function useFetchApi(url) {
-  const [fetched, setFetched] = useState(false);
-  const [loading, setLoading] = useState(false);
+export default function useFetchApi(url, id) {
   const [data, setData] = useState([]);
 
   const fetchData = async () => {
     try {
-      setLoading(true);
-      const response = await fetch(url);
+      const response = await fetch(url + '/getroom/' + id);
       const respData = await response.json();
       setData(respData);
-      setFetched(true);
     } catch (e) {
       console.error(e);
     } finally {
-      setLoading(false);
-    }
-  }
-
-  const authLogin = async (dataForm) => {
-    try {
-      setLoading(true);
-      const resp = await fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(dataForm),
-      });
-      setData(resp)
-    } catch (e) {
-      console.error(e);
-    } finally {
-      setLoading(false);
     }
   };
 
-  const register = async (dataForm) => {
+  const createRoom = async (dataForm) => {
     try {
-      setLoading(true);
-      await fetch(url, {
+      await fetch(url + '/createroom/' + id, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(dataForm),
+        body: JSON.stringify({ name: dataForm }),
       });
+      await delay(2000);
+      await fetchData();
     } catch (e) {
       console.error(e);
     } finally {
-      setLoading(false);
     }
-  }
+  };
+
+  const deleteRoom = async (id) => {
+    try {
+      await fetch(url + `/${id}`, {
+        method: 'DELETE',
+      });
+      await fetchData();
+    } catch (e) {
+      console.error(e);
+    } finally {
+    }
+  };
 
   useEffect(() => {
     fetchData();
   }, []);
 
-  return { data, loading, fetched, setData, authLogin, register };
+  return { data, setData, createRoom, deleteRoom };
 }
