@@ -17,7 +17,7 @@ const RoomPage = () => {
   const url = process.env.REACT_APP_SERVER_URL;
   const id = localStorage.getItem('idUser');
 
-  const { data, createZoom } = useFetchApi(url + 'room', id);
+  const { data, createRoom, deleteRoom } = useFetchApi(url + 'room', id);
 
   const showModal = () => {
     setOpen(true);
@@ -35,7 +35,7 @@ const RoomPage = () => {
     setConfirmLoading(true);
 
     const { name } = values;
-    createZoom(name);
+    createRoom(name);
     setTimeout(() => {
       setOpen(false);
       setConfirmLoading(false);
@@ -75,7 +75,7 @@ const RoomPage = () => {
                   Number of questions: <strong>{item.questions.length}</strong>
                 </p>
                 <div>
-                  <Button className="delete" type="light">
+                  <Button className="delete" type="light" onClick={() => deleteRoom(item._id)}>
                     Delete
                   </Button>
                   <Button type="primary" onClick={() => getPin(item._id)}>
@@ -98,4 +98,4 @@ const RoomPage = () => {
   );
 };
 
-export default withAuth(false, RoomPage);
+export default withAuth(true, RoomPage);
