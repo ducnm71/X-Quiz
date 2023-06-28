@@ -28,6 +28,7 @@
         <input type="text" id="name-input" name="playerName">
       </div>
       <button onclick="join()">Join</button>
+      <button onclick="leave()">Leave</button>
   
     <h2>Players in Room</h2>
     <button onclick="showPlayer()">show</button>
@@ -61,6 +62,9 @@
       const pin = roomInput.value.trim();
       
       socket.emit('join', { pin, name });
+    }
+    const leave = () => {
+      socket.emit('leave')
     }
     socket.on('roomNotFound', () => {
       alert('Room not found');
