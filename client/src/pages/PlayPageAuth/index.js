@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { Image, Button } from 'antd';
+import { Image, Button, Radio } from 'antd';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import './index.css';
@@ -13,10 +13,14 @@ import { socket } from '~/utils/socketio';
 
 function PlayPageAuth() {
   const [isHost, setIsHost] = useState(false);
-  const [isQuizStarted, setIsQuizStarted] = useState(false);
+  const [isStarted, setIsStarted] = useState(false);
   const [players, setPlayers] = useState([]);
-  const [questions, setQuestions] = useState([]);
+  const [question, setQuestion] = useState({});
+  const [questionIndex, setQuestionIndex] = useState(0);
   const [score, setScore] = useState(0);
+  const [radio, setRadio] = useState(0);
+  const [isShow, setIsShow] = useState(false);
+
   const accessToken = useSelector(selectAccessToken);
   const location = useLocation();
   const navigate = useNavigate();
@@ -29,10 +33,15 @@ function PlayPageAuth() {
   const data = location.state;
   const pin = data.pin;
 
-  useEffect(() => {
-    socket.emit('getroom', pin);
-    socket.on('updatePlayers', (updatedPlayers) => setPlayers(updatedPlayers));
-  }, []);
+  const handleUpdatePlayers = (data) => {
+    setPlayers(data);
+  };
+
+  // useEffect(() => {
+  //   socket.emit('getroom', pin);
+  // }, []);
+
+  socket.on('updatePlayers', handleUpdatePlayers);
 
   const handleExit = () => {
     socket.emit('stopQuiz');
@@ -42,18 +51,41 @@ function PlayPageAuth() {
 
   const handleStart = () => {
     socket.emit('startQuiz', pin);
-    socket.on('question', (question, questionIndex) => {
-      setQuestions(question);
-    });
-    setIsQuizStarted(true);
+    setIsStarted(true);
   };
 
-  const handleDisconnect = () => {
-    socket.emit('clientDisconnect');
-    socket.on('updatePlayers', (updatedPlayers) => setPlayers(updatedPlayers));
+  const handleLeave = () => {
+    socket.emit('leave');
   };
 
-  console.log('questionsssssss', questions);
+  const onChangeRadio = (e) => {
+    console.log('radio checked', e.target.value);
+    setRadio(e.target.value);
+  };
+
+  // const handleAnswer = () => {
+  //   if (radio === 0) {
+  //     socket.emit('answer', { selectedAnswerIndex: radio, qi: questionIndex });
+  //     socket.on('answerResult', (result) => console.log(result));
+  //   }
+  // };
+
+  socket.on('question', (data, index) => {
+    setIsStarted(true);
+    setQuestion(data);
+    setRadio(data.options[0]);
+    setQuestionIndex(index);
+  });
+
+  const handleShow = () => {
+    socket.emit('getroom', pin);
+    setIsShow(true);
+  };
+
+  // socket.emit('answer', radio);
+
+  console.log(players);
+  console.log(radio);
   console.log('scoresssssss', score);
   return (
     <React.Fragment>
@@ -71,21 +103,56 @@ function PlayPageAuth() {
                 <h1>{data.pin}</h1>
               </div>
               <Image src={JoinGameQR} width={135} />
-              <Button
-                onClick={handleStart}
-                style={{
-                  position: 'absolute',
-                  right: 50,
-                  top: 280,
-                  width: 110,
-                  fontSize: 25,
-                  fontWeight: 700,
-                  height: 60,
-                  padding: 8,
-                }}
-              >
-                Start
-              </Button>
+              {isStarted === false ? (
+                <>
+                  <Button
+                    onClick={handleStart}
+                    style={{
+                      position: 'absolute',
+                      right: 50,
+                      top: 280,
+                      width: 110,
+                      fontSize: 25,
+                      fontWeight: 700,
+                      height: 60,
+                      padding: 8,
+                    }}
+                  >
+                    Start
+                  </Button>
+                  <Button
+                    onClick={handleShow}
+                    style={{
+                      position: 'absolute',
+                      right: 50,
+                      top: 100,
+                      width: 110,
+                      fontSize: 25,
+                      fontWeight: 700,
+                      height: 60,
+                      padding: 8,
+                    }}
+                  >
+                    Show
+                  </Button>
+                </>
+              ) : (
+                <Button
+                  onClick={handleExit}
+                  style={{
+                    position: 'absolute',
+                    right: 50,
+                    top: 280,
+                    width: 110,
+                    fontSize: 25,
+                    fontWeight: 700,
+                    height: 60,
+                    padding: 8,
+                  }}
+                >
+                  Stop
+                </Button>
+              )}
               <Button
                 onClick={handleExit}
                 style={{
@@ -111,49 +178,7 @@ function PlayPageAuth() {
                 preview={false}
               />
               <div className="user-name">{data.name}</div>
-              <div className="container-player">
-                {players.map((item) => (
-                  <div className="player">
-                    <Image
-                      style={{
-                        borderRadius: 10,
-                      }}
-                      width={160}
-                      src={Avatar}
-                      preview={false}
-                    />
-                    <div>{item.name}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </>
-        ) : (
-          <>
-            <div className="player-component">
-              <div className="waiting-text">
-                <i>Waiting for the host to start</i>
-              </div>
-              <Link to="/play">
-                <Button
-                  onClick={handleDisconnect}
-                  style={{
-                    width: 110,
-                    fontSize: 25,
-                    fontWeight: 700,
-                    height: 60,
-                    padding: 8,
-                    position: 'absolute',
-                    right: '50px',
-                    top: -100,
-                  }}
-                >
-                  Exit
-                </Button>
-              </Link>
-            </div>
-            <div className="userInfor-container">
-              {isQuizStarted === false ? (
+              {isShow ? (
                 <div className="container-player">
                   {players.map((item) => (
                     <div className="player">
@@ -170,10 +195,65 @@ function PlayPageAuth() {
                   ))}
                 </div>
               ) : (
+                <></>
+              )}
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="player-component">
+              <Link to="/play">
+                <Button
+                  onClick={handleLeave}
+                  style={{
+                    width: 110,
+                    fontSize: 25,
+                    fontWeight: 700,
+                    height: 60,
+                    padding: 8,
+                    position: 'absolute',
+                    right: '50px',
+                    top: -100,
+                  }}
+                >
+                  Exit
+                </Button>
+              </Link>
+            </div>
+            <div className="userInfor-container">
+              {isStarted === false ? (
                 <>
-                  {questions.map((item) => (
-                    <div>{item.description}</div>
+                  <div className="waiting-text">
+                    <i>Waiting for the host to start</i>
+                  </div>
+
+                  <div className="container-player">
+                    {players.map((item) => (
+                      <div className="player">
+                        <Image
+                          style={{
+                            borderRadius: 10,
+                          }}
+                          width={160}
+                          src={Avatar}
+                          preview={false}
+                        />
+                        <div>{item.name}</div>
+                      </div>
+                    ))}
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div>{question.description}</div>
+                  {question.options.map((item, index) => (
+                    <Radio.Group onChange={onChangeRadio} key={index} value={radio}>
+                      <Radio value={index + 1}>
+                        {String.fromCharCode(65 + index)}: {item}
+                      </Radio>
+                    </Radio.Group>
                   ))}
+                  {/* <Button onClick={handleAnswer}>Submit</Button>   */}
                 </>
               )}
             </div>
