@@ -60,10 +60,20 @@ const socketApi = () => {
                         newPlayer.roomId = checkRoom._id;
                         await checkRoom.save();
                         await newPlayer.save();
-                      
+
                         const players = await playerModel.find({roomId: checkRoom._id})
                         io.to(pin).emit('updatePlayers', players)
                         
+                        socket.on('leave', async () => {
+                          socket.leave(pin)
+                          const player = await playerModel.findByIdAndDelete(newPlayer._id)
+                          console.log(player.name + ' lelf');
+                          checkRoom.players = checkRoom.players.filter((player) => player._id !== newPlayer._id)
+                          await checkRoom.save()
+                          const players = await playerModel.find({roomId: checkRoom._id})
+                          io.to(pin).emit('updatePlayers', players)
+                          
+                        })
                         socket.on('answer',async ({selectedAnswerIndex, qi}) => {
                           const room = await roomModel.findOne({pin: pin}).populate('questions')
                           const questions = room.questions
@@ -110,6 +120,7 @@ const socketApi = () => {
     // Xử lý sự kiện khi một người chơi ngắt kết nối
     socket.on('disconnect', function() {
       console.log('A client disconnected');
+      socket.leave(roomPin)
       clearInterval(intervalId)
     });
   });
