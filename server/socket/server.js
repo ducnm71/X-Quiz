@@ -1,57 +1,63 @@
-const {io} = require('../app')
-const roomModel = require('../models/roomModel')
-const playerModel = require('../models/playerModel')
-
-
-
+const { io } = require('../app');
+const roomModel = require('../models/roomModel');
+const playerModel = require('../models/playerModel');
 
 const socketApi = () => {
-  io.on('connection', function(socket) {
+  io.on('connection', function (socket) {
     console.log('A client connected');
-    
-    
-    
+
     let intervalId;
     let questionIndex;
     let roomPin = '';
-    
-    socket.on('getroom', async(pin) => {
-      socket.join(pin)
-      const room = await roomModel.findOne({pin: pin}).populate('players')
-      socket.emit('updatePlayers', room.players)
-    })
+
+    socket.on('getroom', async (pin) => {
+      socket.join(pin);
+      const room = await roomModel.findOne({ pin: pin }).populate('players');
+      socket.emit('updatePlayers', room.players);
+    });
     socket.on('startQuiz', (pin) => {
       roomPin = pin;
       questionIndex = 0;
       sendQuestion();
-      intervalId = setInterval(sendQuestion, 7000)
+      intervalId = setInterval(sendQuestion, 7000);
     });
-    const sendQuestion = async () =>{
-        const room = await roomModel.findOne({pin: roomPin}).populate('questions')
-        const questions = room.questions
-        if (questionIndex < questions.length) {
-            const question = questions[questionIndex];
-            io.to(roomPin).emit('question', question, questionIndex);
-            //console.log(questionIndex);
-            questionIndex++;
-        } else {
-            clearInterval(intervalId);
-            scoreTable()
-        }
-    }
+    const sendQuestion = async () => {
+      const room = await roomModel.findOne({ pin: roomPin }).populate('questions');
+      const questions = room.questions;
+      if (questionIndex < questions.length) {
+        const question = questions[questionIndex];
+        io.to(roomPin).emit('question', question, questionIndex);
+        //console.log(questionIndex);
+        questionIndex++;
+      } else {
+        clearInterval(intervalId);
+        scoreTable();
+      }
+    };
     // Xử lý sự kiện khi nhập mã PIN và tên người chơi
-    socket.on('join', async({pin, name}) => {
-      try{
-          
-          const checkRoom = await roomModel.findOne({pin: pin}).populate('players')
-          
-          if (!checkRoom) {
-            socket.emit('roomNotFound')
+    socket.on('join', async ({ pin, name }) => {
+      console.log(name);
+      try {
+        const checkRoom = await roomModel.findOne({ pin: pin }).populate('players');
+
+        if (!checkRoom) {
+          socket.emit('roomNotFound');
+        } else {
+          const checkExist = checkRoom.players.find((players) => players.name === name);
+          if (checkExist) {
+            socket.emit('existed');
           } else {
-                const checkExist = checkRoom.players.find(players => players.name === name)
-                if (checkExist){
-                    socket.emit('existed')
-                } else{
+            socket.emit('joined', { pin, name });
+            socket.join(pin);
+            const newPlayer = await playerModel.create({ name });
+            if (newPlayer) {
+              checkRoom.players.push(newPlayer._id);
+              newPlayer.roomId = checkRoom._id;
+              await checkRoom.save();
+              await newPlayer.save();
+
+              const players = await playerModel.find({ roomId: checkRoom._id });
+              io.to(pin).emit('updatePlayers', players);
 
                     socket.join(pin)
                     const newPlayer = await playerModel.create({ name});
@@ -91,39 +97,40 @@ const socketApi = () => {
                             await newPlayer.save()
                           });
                     }
+
                 }
+
+                await newPlayer.save();
+              });
             }
-        } catch (err) {
-            console.error(err)
+          }
         }
-    })
-    
-    
-    
-                                            
+      } catch (err) {
+        console.error(err);
+      }
+    });
+
     socket.on('stopQuiz', () => {
-        clearInterval(intervalId);
-        scoreTable()
+      clearInterval(intervalId);
+      scoreTable();
     });
 
     const scoreTable = async () => {
-        const result = await  roomModel.findOne({pin: roomPin}).populate('players')
-        const score = result.players.map((player) => {
-            return {name: player.name, score: player.score}
-        })
-        io.to(roomPin).emit('score', score)
-    }
+      const result = await roomModel.findOne({ pin: roomPin }).populate('players');
+      const score = result.players.map((player) => {
+        return { name: player.name, score: player.score };
+      });
+      io.to(roomPin).emit('score', score);
+    };
 
-    
-    
-                                
     // Xử lý sự kiện khi một người chơi ngắt kết nối
-    socket.on('disconnect', function() {
+    socket.on('disconnect', function () {
       console.log('A client disconnected');
       socket.leave(roomPin)
       clearInterval(intervalId)
+
     });
   });
-}
+};
 
-module.exports = socketApi
+module.exports = socketApi;
