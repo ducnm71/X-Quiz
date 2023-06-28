@@ -47,11 +47,10 @@ const getQuestions = asyncHandler(async (req, res) => {
 
 const deleteQuestion = asyncHandler(async (req, res) => {
   const question = await questionSchema.findByIdAndDelete(req.params.quesId);
-  console.log(question);
   const room = await roomModel.findById(req.params.roomId);
-  room.questions = room.questions.filter((id) => id != req.params.quesId)
+  room.questions = room.questions.filter((id) => id != req.params.quesId);
 
-  await room.save()
+  await room.save();
 
   if (room.questions) {
     res.status(201).json(room.questions);
