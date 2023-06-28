@@ -73,6 +73,7 @@ const socketApi = () => {
                 if (qi >= 0 && qi <= questions.length) {
                   const currentQuestion = questions[qi];
                   const correctAnswer = currentQuestion.correctAnswer;
+
                   if (selectedAnswerIndex === currentQuestion.options[correctAnswer]) {
                     newPlayer.score += 10;
                     io.to(pin).emit('answerResult', { isCorrect: true, score: newPlayer.score });
