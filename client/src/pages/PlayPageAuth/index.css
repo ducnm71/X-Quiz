@@ -68,3 +68,13 @@
     box-sizing: border-box;
     background-color: #F2F2F2;
 }
+
+.container-player {
+    display: flex
+}
+
+.player {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}

@@ -36,7 +36,6 @@ const socketApi = () => {
     };
     // Xử lý sự kiện khi nhập mã PIN và tên người chơi
     socket.on('join', async ({ pin, name }) => {
-
       try {
         const checkRoom = await roomModel.findOne({ pin: pin }).populate('players');
 
@@ -111,7 +110,7 @@ const socketApi = () => {
     };
 
     // Xử lý sự kiện khi một người chơi ngắt kết nối
-    socket.on('disconnect', function () {
+    socket.on('clientDisconnect', function () {
       console.log('A client disconnected');
       socket.leave(roomPin)
       clearInterval(intervalId)
