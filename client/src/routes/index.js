@@ -11,11 +11,13 @@ import ContactPage from '~/pages/ContactPage';
 import SignUpPage from '~/pages/SignUpPage';
 import QuestionPage from '~/pages/QuestionPage';
 import PlayPageAuth from '~/pages/PlayPageAuth';
+import PlayerRoomPage from '~/pages/PlayerRoomPage';
 
 const publicRoutes = [
   { path: '/', component: HomePage, layout: DefaultLayout, title: 'Home' },
   { path: '/play', component: EnterPIN, layout: null, title: 'Enter Game PIN' },
-  { path: '/start', component: PlayPageAuth, layout: null, title: 'Enter Game PIN' },
+  { path: '/player', component: PlayerRoomPage, layout: null, title: 'Player Room' },
+  { path: '/start', component: PlayPageAuth, layout: null, title: 'Start Game ' },
   { path: '/join', component: JoinGame, layout: null, title: 'Join Game' },
   { path: '/room', component: RoomPage, layout: DefaultLayout, title: 'Room' },
   { path: '/:id/:name/question', component: QuestionPage, layout: DefaultLayout, title: 'Question' },

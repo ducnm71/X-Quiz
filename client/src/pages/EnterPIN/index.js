@@ -16,7 +16,7 @@ const EnterPIN = () => {
     });
 
     socket.on('joined', (data) => {
-      navigate('/start', { state: data });
+      navigate('/player', { state: data });
     });
   }, []);
 
