@@ -67,6 +67,7 @@ const EnterPIN = () => {
               />
             </Form.Item>
             <Button
+              
               htmlType="submit"
               block
               style={{
