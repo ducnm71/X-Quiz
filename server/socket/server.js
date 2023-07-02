@@ -46,7 +46,7 @@ const socketApi = () => {
           if (checkExist) {
             socket.emit('existed');
           } else {
-            //socket.emit('joined', { pin, name });
+            socket.emit('joined', { pin, name });
             socket.join(pin);
             const newPlayer = await playerModel.create({ name });
             if (newPlayer) {
@@ -60,8 +60,8 @@ const socketApi = () => {
 
               socket.on('leave', async () => {
                 socket.leave(pin);
-                const player = await playerModel.findByIdAndDelete(newPlayer._id);
-                console.log(player.name + ' lelf');
+                // const player = await playerModel.findByIdAndDelete(newPlayer._id);
+                // console.log(player.name + ' lelf');
                 checkRoom.players = checkRoom.players.filter((player) => player._id !== newPlayer._id);
                 await checkRoom.save();
                 const players = await playerModel.find({ roomId: checkRoom._id });
@@ -72,9 +72,8 @@ const socketApi = () => {
                 const questions = room.questions;
                 if (qi >= 0 && qi <= questions.length) {
                   const currentQuestion = questions[qi];
-                  const correctAnswer = currentQuestion.correctAnswer;
 
-                  if (selectedAnswerIndex === currentQuestion.options[correctAnswer]) {
+                  if (selectedAnswerIndex === currentQuestion.correctAnswer) {
                     newPlayer.score += 10;
                     io.to(pin).emit('answerResult', { isCorrect: true, score: newPlayer.score });
                   } else {

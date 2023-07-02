@@ -24,7 +24,7 @@ export default function useFetchApi(url, id) {
         },
         body: JSON.stringify({ name: dataForm }),
       });
-      await delay(2000);
+      await delay(1000);
       await fetchData();
     } catch (e) {
       console.error(e);
