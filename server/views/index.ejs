@@ -1,147 +1,146 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Player List</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-    }
-    .container {
-      max-width: 400px;
-      margin: 0 auto;
-    }
-    .form-group {
-      margin-bottom: 10px;
-    }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <h1>Fill form to join room</h1>
+  <head>
+    <title>Player List</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+      }
+      .container {
+        max-width: 400px;
+        margin: 0 auto;
+      }
+      .form-group {
+        margin-bottom: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Fill form to join room</h1>
 
       <div class="form-group">
         <label for="room-input">Room PIN:</label>
-        <input type="text" id="room-input" name="room">
+        <input type="text" id="room-input" name="room" />
       </div>
       <div class="form-group">
         <label for="name-input">Player Name:</label>
-        <input type="text" id="name-input" name="playerName">
+        <input type="text" id="name-input" name="playerName" />
       </div>
       <button onclick="join()">Join</button>
       <button onclick="leave()">Leave</button>
-  
-    <h2>Players in Room</h2>
-    <button onclick="showPlayer()">show</button>
-    <ul id="player-list" class="message-list"></ul>
-    <ul id="player-list2" class="message-list"></ul>
 
-    <h1>Game</h1>
-    <button onclick="startQuiz()">Start</button>
-    <button onclick="stopQuiz()">Stop</button>
-    <h2 id="question"></h2>
-    <ul id="answers"></ul>
-    <button onclick="answerQuestion()">Answer</button>
+      <h2>Players in Room</h2>
+      <button onclick="showPlayer()">show</button>
+      <ul id="player-list" class="message-list"></ul>
+      <ul id="player-list2" class="message-list"></ul>
 
-    <h1>Score Table</h1>
-    <ul id="scoretable"></ul>
-  </div>
+      <h1>Game</h1>
+      <button onclick="startQuiz()">Start</button>
+      <button onclick="stopQuiz()">Stop</button>
+      <h2 id="question"></h2>
+      <ul id="answers"></ul>
+      <button onclick="answerQuestion()">Answer</button>
 
-  <script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
-  <script>
-    const URL = 'http://localhost:5000';
-    const socket = io(URL);
+      <h1>Score Table</h1>
+      <ul id="scoretable"></ul>
+    </div>
 
-    
+    <script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
+    <script>
+      const URL = 'http://localhost:5000';
+      const socket = io(URL);
 
-    // Join room
-    const joinForm = document.getElementById('join-form');
-    const playerNameInput = document.getElementById('name-input');
-    const roomInput = document.getElementById('room-input');
-    const join = () =>{
-      const name = playerNameInput.value.trim();
-      const pin = roomInput.value.trim();
-      
-      socket.emit('join', { pin, name });
-    }
-    const leave = () => {
-      socket.emit('leave')
-    }
-    socket.on('roomNotFound', () => {
-      alert('Room not found');
-    });
-    socket.on('existed' ,() => {
-      alert('This name has existed in room')
-    })
-    // Update player list
-    const playerList = document.getElementById('player-list');
-    socket.on('updatePlayers', (players)=> {
-      playerList.innerHTML = '';
-      players.forEach(function(player) {
-        const listItem = document.createElement('li');
-        listItem.textContent = player.name;
-        playerList.appendChild(listItem);
+      // Join room
+      const joinForm = document.getElementById('join-form');
+      const playerNameInput = document.getElementById('name-input');
+      const roomInput = document.getElementById('room-input');
+      const join = () => {
+        const name = playerNameInput.value.trim();
+        const pin = roomInput.value.trim();
+
+        socket.emit('join', { pin, name });
+      };
+      const leave = () => {
+        socket.emit('leave');
+      };
+      socket.on('roomNotFound', () => {
+        alert('Room not found');
       });
-    });
+      socket.on('existed', () => {
+        alert('This name has existed in room');
+      });
+      // Update player list
+      const playerList = document.getElementById('player-list');
+      socket.on('updatePlayers', (players) => {
+        playerList.innerHTML = '';
+        players.forEach(function (player) {
+          const listItem = document.createElement('li');
+          listItem.textContent = player.name;
+          playerList.appendChild(listItem);
+        });
+      });
 
-    const playerList2 = document.getElementById('player-list2')
-    const showPlayer = () => {
-      const pin = roomInput.value.trim();
-      socket.emit('getroom' ,pin)
-    }
-    socket.on('updatePlayers2', (players)=> {
-    playerList2.innerHTML = '';
-    players.forEach(function(player) {
-      const listItem = document.createElement('li');
-      listItem.textContent = player.name;
-      playerList2.appendChild(listItem);
-    });
-  });
+      const playerList2 = document.getElementById('player-list2');
+      const showPlayer = () => {
+        const pin = roomInput.value.trim();
+        socket.emit('getroom', pin);
+      };
+      socket.on('updatePlayers2', (players) => {
+        playerList2.innerHTML = '';
+        players.forEach(function (player) {
+          const listItem = document.createElement('li');
+          listItem.textContent = player.name;
+          playerList2.appendChild(listItem);
+        });
+      });
 
-     function startQuiz() {
-      const pin = roomInput.value.trim();
-      socket.emit('startQuiz', pin);
-    }
-
-    function stopQuiz() {
-      socket.emit('stopQuiz');
-    }
-
-    socket.on('question', function(data, questionIndex) {
-      let question = data.title;
-      let answers = data.options;
-
-      // Display the question and answers on the page
-      document.getElementById('question').innerHTML = question;
-
-      let answersHtml = '';
-      for (let i = 0; i < answers.length; i++) {
-        answersHtml += '<li><label><input type="radio" name="answer" value="' + answers[i] + '">' + answers[i] + '</label></li>'
+      function startQuiz() {
+        const pin = roomInput.value.trim();
+        socket.emit('startQuiz', pin);
       }
-      document.getElementById('answers').innerHTML = answersHtml;
 
-      localStorage.setItem('qi', questionIndex)
-    });
-
-    async function answerQuestion() {
-      let selectedAnswerIndex = await document.querySelector('input[name="answer"]:checked').value;
-      let questionIndex  =  localStorage.getItem('qi')
-      let qi = parseInt(questionIndex) 
-      console.log(qi);
-      socket.emit('answer', {selectedAnswerIndex, qi});
-    }
-    socket.on('answerResult', function(result) {
-      let resultMessage = result.isCorrect ? 'Correct! ' : 'Incorrect! ';
-      resultMessage += 'Score: ' + result.score;
-      console.log(resultMessage);
-    });
-
-    socket.on('score', (score) => {
-      let scoreHtml = '';
-      for (let i = 0; i < score.length; i++) {
-        scoreHtml += '<li>' + score[i].name + ' ' + score[i].score + '</li>'
+      function stopQuiz() {
+        socket.emit('stopQuiz');
       }
-      document.getElementById('scoretable').innerHTML = scoreHtml;
-    })
-  </script>
-</body>
+
+      socket.on('question', function (data, questionIndex) {
+        let question = data.title;
+        let answers = data.options;
+
+        // Display the question and answers on the page
+        document.getElementById('question').innerHTML = question;
+
+        let answersHtml = '';
+        for (let i = 0; i < answers.length; i++) {
+          answersHtml +=
+            '<li><label><input type="radio" name="answer" value="' + answers[i] + '">' + answers[i] + '</label></li>';
+        }
+        document.getElementById('answers').innerHTML = answersHtml;
+
+        localStorage.setItem('qi', questionIndex);
+      });
+
+      async function answerQuestion() {
+        let selectedAnswerIndex = await document.querySelector('input[name="answer"]:checked').value;
+        let questionIndex = localStorage.getItem('qi');
+        let qi = parseInt(questionIndex);
+        console.log(qi);
+        socket.emit('answer', { selectedAnswerIndex, qi });
+      }
+      socket.on('answerResult', function (result) {
+        let resultMessage = result.isCorrect ? 'Correct! ' : 'Incorrect! ';
+        resultMessage += 'Score: ' + result.score;
+        console.log(resultMessage);
+      });
+
+      socket.on('score', (score) => {
+        let scoreHtml = '';
+        for (let i = 0; i < score.length; i++) {
+          scoreHtml += '<li>' + score[i].name + ' ' + score[i].score + '</li>';
+        }
+        document.getElementById('scoretable').innerHTML = scoreHtml;
+      });
+    </script>
+  </body>
 </html>
