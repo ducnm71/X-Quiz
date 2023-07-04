@@ -20,6 +20,7 @@ function PlayerRoomPage() {
   const [score, setScore] = useState([]);
   const [timer, setTimer] = useState(0);
   const [isQuestionAnswered, setIsQuestionAnswered] = useState(false);
+  const [selectedOption, setSelectedOption] = useState(null);
 
   const data = location.state;
 
@@ -64,6 +65,7 @@ function PlayerRoomPage() {
   const handlePlayer = (value) => setPlayers(value);
 
   const handleClick = (value) => {
+    setSelectedOption(value);
     socket.emit('answer', { selectedAnswerIndex: value, qi: indexQuestion });
   };
 
@@ -72,9 +74,6 @@ function PlayerRoomPage() {
     navigate('/play');
   };
 
-  console.log('answer', answer);
-
-  console.log('socre', score);
   return (
     <div
       className="player-container"
@@ -87,6 +86,8 @@ function PlayerRoomPage() {
         <Col offset={8} span={8}>
           {Object.keys(question).length === 0 ? (
             <Title style={{ color: 'white', marginTop: 100 }}>Waiting for the host to start</Title>
+          ) : isQuestionAnswered ? (
+            <></>
           ) : (
             <Row>
               <Title style={{ color: 'white', marginTop: 100 }}>Question {indexQuestion + 1}: </Title>
@@ -111,8 +112,8 @@ function PlayerRoomPage() {
       </Row>
       {Object.keys(question).length === 0 ? (
         <Row>
-          {players.map((item) => (
-            <Col span={4} className="player">
+          {players.map((item, index) => (
+            <Col key={index} span={4} className="player">
               <Image
                 style={{
                   borderRadius: 10,
@@ -137,8 +138,8 @@ function PlayerRoomPage() {
               {score
                 .sort((a, b) => b.score - a.score)
                 .slice(0, 3)
-                .map((playerScore) => (
-                  <Col span={4} className="player">
+                .map((playerScore, index) => (
+                  <Col key={index} span={4} className="player">
                     <Image
                       style={{
                         borderRadius: 10,
@@ -161,7 +162,7 @@ function PlayerRoomPage() {
             {question.options.slice(0, 2).map((option, index) => (
               <Title
                 onClick={() => handleClick(index + 1)}
-                className={`title-question-${index}`}
+                className={`title-question-${index} ${selectedOption === index + 1 ? 'selected-answer' : ''} `}
                 key={index}
                 style={{
                   color: '#fff',
@@ -177,7 +178,7 @@ function PlayerRoomPage() {
             {question.options.slice(2, 4).map((option, index) => (
               <Title
                 onClick={() => handleClick(index + 3)}
-                className={`title-question-${index + 2}`}
+                className={`title-question-${index + 2} ${selectedOption === index + 3 ? 'selected-answer' : ''} `}
                 key={index + 2}
                 style={{
                   color: '#fff',

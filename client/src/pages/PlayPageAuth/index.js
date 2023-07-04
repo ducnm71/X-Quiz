@@ -1,14 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { Image, Button, Radio, Row, Col, Typography } from 'antd';
+import { Image, Button, Row, Col, Typography, Modal } from 'antd';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import './index.css';
 import InRoomBackground from '~/assets/imgs/InRoomBackground.png';
 import Avatar from '~/assets/imgs/Rectangle 278.png';
 import JoinGameQR from '~/assets/imgs/JoinGameQR.png';
-import { selectAccessToken } from '~/redux/selectors';
 import { socket } from '~/utils/socketio';
 
 function PlayPageAuth() {
@@ -18,6 +15,7 @@ function PlayPageAuth() {
   const [questionIndex, setQuestionIndex] = useState(0);
   const [score, setScore] = useState([]);
   const [isQuestionAnswered, setIsQuestionAnswered] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -58,7 +56,7 @@ function PlayPageAuth() {
 
   const handleExit = () => {
     socket.emit('stopQuiz');
-    socket.emit('score', handleScore);
+    socket.on('score', handleScore);
     navigate('/room');
   };
 
@@ -71,10 +69,16 @@ function PlayPageAuth() {
     setIsStarted(false);
     socket.emit('stopQuiz');
     socket.on('score', handleScore);
-    setIsQuestionAnswered(false);
+    showModal();
   };
 
-  console.log(isQuestionAnswered);
+  const showModal = () => {
+    setIsQuestionAnswered(true);
+  };
+
+  const closeModal = () => {
+    setIsQuestionAnswered(false);
+  };
 
   return (
     <React.Fragment>
@@ -168,30 +172,17 @@ function PlayPageAuth() {
             </div>
           </Row>
         ) : isQuestionAnswered ? (
-          <Row>
-            <Col span={24}>
-              <Title level={3} style={{ color: 'white', marginTop: 20 }}>
-                Scores:
-              </Title>
-              <Row>
-                {score.map((playerScore) => (
-                  <Col span={4} className="player">
-                    <Image
-                      style={{
-                        borderRadius: 10,
-                      }}
-                      width={160}
-                      src={Avatar}
-                      preview={false}
-                    />
-                    <Title level={3} style={{ color: data.name === playerScore.name ? 'rgb(226, 27, 60)' : 'inherit' }}>
-                      {playerScore.name}: {playerScore.score}
-                    </Title>
-                  </Col>
-                ))}
-              </Row>
-            </Col>
-          </Row>
+          <Modal title="Score" open={isQuestionAnswered} onOK={closeModal} onCancel={closeModal}>
+            {score
+              .sort((a, b) => b.score - a.score)
+              .map((item) => {
+                return (
+                  <Title level={5}>
+                    {item.name}: {item.score}
+                  </Title>
+                );
+              })}
+          </Modal>
         ) : (
           <>
             <Row style={{ color: 'white', justifyContent: 'center' }}>
