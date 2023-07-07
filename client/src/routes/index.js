@@ -14,8 +14,8 @@ const publicRoutes = [
   { path: '/play', component: EnterPIN, layout: null, title: 'Enter Game PIN' },
   { path: '/join', component: JoinGame, layout: null, title: 'Join Game' },
   { path: '/room', component: RoomPage, layout: null, title: 'Room' },
-  { path: '/about', component: AboutPage, layout: DefaultLayout, title: 'About Page' },
-  { path: '/contact', component: ContactPage, layout: DefaultLayout, title: 'About Page' },
+  { path: '/about', component: AboutPage, layout: DefaultLayout, title: 'About Us' },
+  { path: '/contact', component: ContactPage, layout: DefaultLayout, title: 'Contact' },
   { path: '/signin', component: SignInPage, layout: null, title: 'Sign' },
   { path: '/signup', component: SignUpPage, layout: null, title: 'Sign Up' },
 ];
