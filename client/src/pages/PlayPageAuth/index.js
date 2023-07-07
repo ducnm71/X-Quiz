@@ -15,7 +15,6 @@ function PlayPageAuth() {
   const [questionIndex, setQuestionIndex] = useState(0);
   const [score, setScore] = useState([]);
   const [isQuestionAnswered, setIsQuestionAnswered] = useState(false);
-  const [isModalVisible, setIsModalVisible] = useState(false);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -30,7 +29,7 @@ function PlayPageAuth() {
     return () => {
       socket.off('question', handleQuestion);
     };
-  }, []);
+  }, [pin]);
 
   useEffect(() => {
     if (score.length > 0 && score.length === playerRoom.length) {

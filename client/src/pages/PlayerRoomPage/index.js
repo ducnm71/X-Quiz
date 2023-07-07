@@ -15,7 +15,6 @@ function PlayerRoomPage() {
   const [players, setPlayers] = useState([]);
   const [question, setQuestion] = useState({});
   const [indexQuestion, setIndexQuestion] = useState();
-  const [isStarted, setIsStarted] = useState(false);
   const [answer, setAnswer] = useState(0);
   const [score, setScore] = useState([]);
   const [timer, setTimer] = useState(0);
@@ -40,7 +39,7 @@ function PlayerRoomPage() {
     return () => {
       sessionStorage.removeItem('isRefreshed');
     };
-  }, []);
+  }, [navigate]);
 
   useEffect(() => {
     if (score.length > 0 && score.length === players.length) {
@@ -55,7 +54,6 @@ function PlayerRoomPage() {
   const handleQuestion = (value, index) => {
     setQuestion((prevQuestion) => ({ ...prevQuestion, ...value }));
     setIndexQuestion(index);
-    setIsStarted(true);
   };
 
   const handleAnswer = (value) => {
