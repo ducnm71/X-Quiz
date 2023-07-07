@@ -1,0 +1,73 @@
+.contact-map {
+    width: 100%;
+}
+
+.contact-input {
+    border: none;
+    border-radius: 0;
+    border-top: 1px solid #e1e1e1;
+    background-color: #ffffff;
+    /* padding: 8px 10px; */
+    color: gray;
+}
+
+.contact-input:focus {
+    border-top: 1px solid #42b3e5;
+}
+
+.contactSidebar-container {
+    width: 100%;
+}
+
+.sentence {
+    font-family: 'Volkhov';
+    color: #3156A3;
+    font-size: 18px;
+}
+
+.contactSidebar-info {
+    margin-top: 10px;
+    margin-bottom: 20px;
+    margin-left: -15px;
+}
+
+.contactSidebar-info>p {
+    font-size: 15px;
+    line-height: 1;
+    color: #9d9d9d;
+}
+
+.contactSidebar-social {
+    padding: 0;
+    margin: 0;
+}
+
+.socialInfo-container {
+    padding: 8px 0px;
+    display: flex;
+    align-items: center;
+    margin-top: -10px;
+}
+
+.socialInfo-container>i {
+    font-size: 33px;
+    color: #cccccc;
+    margin-right: 0;
+    transition: all ease 0.2s;
+    cursor: pointer;
+}
+
+.socialInfo-container>i:hover {
+    color: #42b3e5;
+}
+
+.socialInfo-container>span {
+    font-size: 14px;
+    margin-left: 10px;
+}
+
+.social-link {
+    color: #3156a3;
+    text-decoration: underline;
+    cursor: pointer;
+}
