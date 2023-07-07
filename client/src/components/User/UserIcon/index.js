@@ -2,7 +2,7 @@ import { Avatar, Button, Tooltip } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 import { Fragment, useState } from 'react';
 
-import UserMenu from './UserMenu.js';
+import UserMenu from '../UserMenu';
 const UserIcon = ({ userProfile }) => {
   const [anchorUserMenu, setAnchorUserMenu] = useState(null);
 
