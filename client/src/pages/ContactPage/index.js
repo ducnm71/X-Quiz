@@ -1,39 +1,29 @@
 import React from 'react';
-import {
-  Form,
-  Input,
-  DatePicker,
-  Layout,
-  Typography,
-  Divider,
-  Row,
-  Col,
-  List
-} from 'antd';
-import "./index.css"
+import { Form, Input, DatePicker, Layout, Typography, Divider, Row, Col, List } from 'antd';
+import './index.css';
 
-const { Header, Footer, Sider, Content } = Layout;
+const { Header, Content } = Layout;
 const { Title, Text } = Typography;
 const contactInfo = [
-  "X Quizz",
-  "33 Farlane Street +123 655 655",
-  "Keilor East +123 755 755",
-  "VIC 3033, Australia xquizz@gmail.com"
-]
+  'X Quizz',
+  '33 Farlane Street +123 655 655',
+  'Keilor East +123 755 755',
+  'VIC 3033, Australia xquizz@gmail.com',
+];
 
 const ContactPage = () => {
   return (
     <React.Fragment>
       <Layout
         style={{
-          padding: "50px 250px",
+          padding: '50px 250px',
           height: 'max-content',
         }}
       >
         <Header
           style={{
-            backgroundColor: "#f5f5f5",
-            height: "fit-content",
+            backgroundColor: '#f5f5f5',
+            height: 'fit-content',
             padding: 0,
           }}
         >
@@ -44,28 +34,27 @@ const ContactPage = () => {
             width="100%"
             height="300"
             style={{
-              border: 'none'
+              border: 'none',
             }}
             allowfullscreen=""
             loading="lazy"
             referrerpolicy="no-referrer-when-downgrade"
-            className='contact-map'></iframe>
+            className="contact-map"
+          ></iframe>
         </Header>
         <Layout>
           <Row>
             <Col
               style={{
                 paddingRight: 40,
-                boxSizing: "border-box"
+                boxSizing: 'border-box',
               }}
               span={16}
             >
               <Content>
                 <Title level={3}>Online Contact Form</Title>
                 <Divider></Divider>
-                <Form
-                  layout="vertical"
-                >
+                <Form layout="vertical">
                   <Input.Group>
                     <Row gutter={12}>
                       <Col span={12}>
@@ -85,7 +74,7 @@ const ContactPage = () => {
                     <Row gutter={12}>
                       <Col span={12}>
                         <Form.Item label="Date of Birth">
-                          <DatePicker style={{ width: "100%" }} className="contact-input" />
+                          <DatePicker style={{ width: '100%' }} className="contact-input" />
                         </Form.Item>
                       </Col>
                       <Col span={12}>
@@ -121,11 +110,12 @@ const ContactPage = () => {
             </Col>
 
             <Col span={8}>
-              <div className='contactSidebar-container'>
+              <div className="contactSidebar-container">
                 <Title level={3}>X Quizz</Title>
 
-                <Text className='sentence'>
-                  Your feedback is always valuable to us as we continuously strive to improve the user experience and deliver the best games possible.
+                <Text className="sentence">
+                  Your feedback is always valuable to us as we continuously strive to improve the user experience and
+                  deliver the best games possible.
                 </Text>
 
                 <List
@@ -135,31 +125,36 @@ const ContactPage = () => {
                   renderItem={(item) => <List.Item>{item}</List.Item>}
                 />
 
-                <ul className='contactSidebar-social'>
-                  <li className='socialInfo-container'>
-                    <i class="fa-solid fa-square-phone"></i> <span>Phone: <b>1-800-643-4300</b></span>
+                <ul className="contactSidebar-social">
+                  <li className="socialInfo-container">
+                    <i class="fa-solid fa-square-phone"></i>{' '}
+                    <span>
+                      Phone: <b>1-800-643-4300</b>
+                    </span>
                   </li>
-                  <li className='socialInfo-container'>
-                    <i className="fa-solid fa-square-envelope"></i> <span className='social-link'>xquizz@mail.com</span>
+                  <li className="socialInfo-container">
+                    <i className="fa-solid fa-square-envelope"></i> <span className="social-link">xquizz@mail.com</span>
                   </li>
-                  <li className='socialInfo-container'>
-                    <i className="fa-brands fa-square-facebook"></i> <span className='social-link'>facebook.com/xquizz</span>
+                  <li className="socialInfo-container">
+                    <i className="fa-brands fa-square-facebook"></i>{' '}
+                    <span className="social-link">facebook.com/xquizz</span>
                   </li>
-                  <li className='socialInfo-container'>
-                    <i className="fa-brands fa-square-twitter"></i> <span className='social-link'>twitter.com/xquizz</span>
+                  <li className="socialInfo-container">
+                    <i className="fa-brands fa-square-twitter"></i>{' '}
+                    <span className="social-link">twitter.com/xquizz</span>
                   </li>
-                  <li className='socialInfo-container'>
-                    <i className="fa-brands fa-square-google-plus"></i> <span className='social-link'>google.com/xquizz</span>
+                  <li className="socialInfo-container">
+                    <i className="fa-brands fa-square-google-plus"></i>{' '}
+                    <span className="social-link">google.com/xquizz</span>
                   </li>
                 </ul>
-
               </div>
             </Col>
           </Row>
         </Layout>
       </Layout>
     </React.Fragment>
-  )
-}
+  );
+};
 
-export default ContactPage
+export default ContactPage;

@@ -19,15 +19,10 @@ const publicRoutes = [
   { path: '/player', component: PlayerRoomPage, layout: null, title: 'Player Room' },
   { path: '/start', component: PlayPageAuth, layout: null, title: 'Start Game ' },
   { path: '/join', component: JoinGame, layout: null, title: 'Join Game' },
-
-  { path: '/room', component: RoomPage, layout: null, title: 'Room' },
+  { path: '/room', component: RoomPage, layout: DefaultLayout, title: 'Room' },
   { path: '/about', component: AboutPage, layout: DefaultLayout, title: 'About Us' },
   { path: '/contact', component: ContactPage, layout: DefaultLayout, title: 'Contact' },
-
-
   { path: '/:id/:name/question', component: QuestionPage, layout: DefaultLayout, title: 'Question' },
-
-
   { path: '/signin', component: SignInPage, layout: null, title: 'Sign' },
   { path: '/signup', component: SignUpPage, layout: null, title: 'Sign Up' },
 ];
