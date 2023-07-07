@@ -1,94 +1,101 @@
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { Image, Input, Button } from 'antd';
+import React from 'react';
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Button, Typography, Input, Col, Row, Form, Modal } from 'antd';
 
-import './index.css';
-import InRoomBackground from '~/assets/imgs/InRoomBackground.png';
-import Avatar from '~/assets/imgs/Rectangle 278.png';
-import JoinGameQR from '~/assets/imgs/JoinGameQR.png';
-import { selectAccessToken } from '~/redux/selectors';
+import './style.css';
+import useFetchApi from '~/hooks/useFetchApi';
+import withAuth from '~/redux/withAuth';
 
-function RoomPage() {
-  const [isHost, setIsHost] = useState(false);
-  const accessToken = useSelector(selectAccessToken);
-  useEffect(() => {
-    if (accessToken) {
-      setIsHost(true);
+const RoomPage = () => {
+  const { Title } = Typography;
+  const navigate = useNavigate();
+
+  const [open, setOpen] = useState(false);
+  const [confirmLoading, setConfirmLoading] = useState(false);
+  const [form] = Form.useForm();
+  const url = process.env.REACT_APP_SERVER_URL;
+  const id = localStorage.getItem('idUser');
+
+  const { data, createRoom, deleteRoom } = useFetchApi(url + 'room', id);
+
+  const showModal = () => {
+    setOpen(true);
+  };
+
+  const handleCancel = () => {
+    setOpen(false);
+  };
+
+  const handleOk = () => {
+    form.submit();
+  };
+
+  const handleFinish = (values) => {
+    setConfirmLoading(true);
+
+    const { name } = values;
+    createRoom(name);
+    setTimeout(() => {
+      setOpen(false);
+      setConfirmLoading(false);
+    }, 1000);
+  };
+
+  const getPin = async (idRoom) => {
+    try {
+      const resp = await fetch(url + 'room/getpin/' + idRoom);
+      const respData = await resp.json();
+      await navigate('/start', { state: respData });
+    } catch (e) {
+      console.error(e);
     }
-  });
-  return (
-    <React.Fragment>
-      <div
-        className="room-container"
-        style={{
-          backgroundImage: `url(${InRoomBackground})`,
-        }}
-      >
-        {isHost ? (
-          <>
-            <div className="host-container">
-              <div className="game-pin">
-                <h4>Game PIN:</h4>
-                <h1>513 9591</h1>
-              </div>
-              <Image src={JoinGameQR} width={135} />
-              <Button
-                style={{
-                  position: 'absolute',
-                  right: 50,
-                  top: 280,
-                  width: 110,
-                  fontSize: 25,
-                  fontWeight: 700,
-                  height: 60,
-                  padding: 8,
-                }}
-              >
-                Start
-              </Button>
-            </div>
-          </>
-        ) : (
-          <>
-            <div className="player-component">
-              <div className="waiting-text">
-                <i>Waiting for the host to start</i>
-              </div>
-              <Link to="/">
-                <Button
-                  style={{
-                    width: 110,
-                    fontSize: 25,
-                    fontWeight: 700,
-                    height: 60,
-                    padding: 8,
-                    position: 'absolute',
-                    right: '50px',
-                    top: -100,
-                  }}
-                >
-                  Exit
-                </Button>
-              </Link>
-            </div>
-          </>
-        )}
-        <div className="userInfor-container">
-          <Image
-            style={{
-              borderRadius: 10,
-              marginBottom: '20px',
-            }}
-            width={160}
-            src={Avatar}
-            preview={false}
-          />
-          <div className="user-name">Name</div>
-        </div>
-      </div>
-    </React.Fragment>
-  );
-}
+  };
 
-export default RoomPage;
+  return (
+    <div style={{ margin: 30, padding: '24px 50px' }}>
+      <Title style={{ marginBottom: 40, textAlign: 'center' }}>Room Manager</Title>
+      <Button onClick={showModal} size="large" type="primary">
+        New Room
+      </Button>
+      <Row style={{ justifyContent: 'space-between' }}>
+        {data.map((item) => {
+          return (
+            <Col key={item._id} span={10} className="room-wrapper">
+              <Row className="room-wrapper__top">
+                <Link to={`/${item._id}/${item.name}/question`}>
+                  <Title level={2}>{item.name}</Title>
+                </Link>
+              </Row>
+              <Row className="room-wrapper__bot">
+                <p>
+                  Number of players: <strong>{item.players.length}</strong>
+                </p>
+                <p>
+                  Number of questions: <strong>{item.questions.length}</strong>
+                </p>
+                <div>
+                  <Button className="delete" type="light" onClick={() => deleteRoom(item._id)}>
+                    Delete
+                  </Button>
+                  <Button type="primary" onClick={() => getPin(item._id)}>
+                    Start
+                  </Button>
+                </div>
+              </Row>
+            </Col>
+          );
+        })}
+      </Row>
+      <Modal title="Room" open={open} onCancel={handleCancel} confirmLoading={confirmLoading} onOk={handleOk}>
+        <Form form={form} onFinish={handleFinish}>
+          <Form.Item name="name" rules={[{ required: true, message: 'Please enter room name' }]}>
+            <Input placeholder="Please enter room name" />
+          </Form.Item>
+        </Form>
+      </Modal>
+    </div>
+  );
+};
+
+export default withAuth(true, RoomPage);

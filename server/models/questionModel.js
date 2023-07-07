@@ -26,7 +26,7 @@ const questionSchema = new schema(
       type: [{ type: String, required: true }],
       validate: [arrLimit, '{PATH} must have exactly 4 elements'],
     },
-    answer: {
+    correctAnswer: {
       type: Number,
       required: true,
     },

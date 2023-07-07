@@ -1,74 +1,118 @@
-const {io} = require('../app')
-
-
-// Player list management
-let players = {};
-      
-// function addPlayer(playerName) {
-//   players.push(playerName);
-// }
-
-// function removePlayer(playerName) {
-//   var index = players.indexOf(playerName);
-//   if (index !== -1) {
-//     players.splice(index, 1);
-//   }
-// }
-
-// function getPlayerList() {
-//   return players;
-// }
+const { io } = require('../app');
+const roomModel = require('../models/roomModel');
+const playerModel = require('../models/playerModel');
 
 const socketApi = () => {
-  io.on('connection', function(socket) {
+  io.on('connection', function (socket) {
     console.log('A client connected');
-  
+
+    let intervalId;
+    let questionIndex;
+    let roomPin = '';
+
+    socket.on('getroom', async (pin) => {
+      socket.join(pin);
+      const room = await roomModel.findOne({ pin: pin }).populate('players');
+      socket.emit('updatePlayers', room.players);
+    });
+    socket.on('startQuiz', (pin) => {
+      roomPin = pin;
+      questionIndex = 0;
+      sendQuestion();
+      intervalId = setInterval(sendQuestion, 7000);
+    });
+    const sendQuestion = async () => {
+      const room = await roomModel.findOne({ pin: roomPin }).populate('questions');
+      const questions = room.questions;
+      if (questionIndex < questions.length) {
+        const question = questions[questionIndex];
+        io.to(roomPin).emit('question', question, questionIndex);
+        //console.log(questionIndex);
+        questionIndex++;
+      } else {
+        clearInterval(intervalId);
+        scoreTable();
+      }
+    };
     // Xử lý sự kiện khi nhập mã PIN và tên người chơi
-    socket.on('join', function(data) {
-      const room = data.room;
-      const playerName = data.playerName;
-  
-      // Kiểm tra xem phòng có tồn tại không
-      if (!players[room]) {
-        players[room] = [];
+    socket.on('join', async ({ pin, name }) => {
+      try {
+        const checkRoom = await roomModel.findOne({ pin: pin }).populate('players');
+
+        if (!checkRoom) {
+          socket.emit('roomNotFound');
+        } else {
+          const checkExist = checkRoom.players.find((players) => players.name === name);
+          if (checkExist) {
+            socket.emit('existed');
+          } else {
+            socket.emit('joined', { pin, name });
+            socket.join(pin);
+            const newPlayer = await playerModel.create({ name });
+            if (newPlayer) {
+              checkRoom.players.push(newPlayer._id);
+              newPlayer.roomId = checkRoom._id;
+              await checkRoom.save();
+              await newPlayer.save();
+
+              const players = await playerModel.find({ roomId: checkRoom._id });
+              io.to(pin).emit('updatePlayers', players);
+
+              socket.on('leave', async () => {
+                socket.leave(pin);
+                // const player = await playerModel.findByIdAndDelete(newPlayer._id);
+                // console.log(player.name + ' lelf');
+                checkRoom.players = checkRoom.players.filter((player) => player._id !== newPlayer._id);
+                await checkRoom.save();
+                const players = await playerModel.find({ roomId: checkRoom._id });
+                io.to(pin).emit('updatePlayers', players);
+              });
+              socket.on('answer', async ({ selectedAnswerIndex, qi }) => {
+                const room = await roomModel.findOne({ pin: pin }).populate('questions');
+                const questions = room.questions;
+                if (qi >= 0 && qi <= questions.length) {
+                  const currentQuestion = questions[qi];
+
+                  if (selectedAnswerIndex === currentQuestion.correctAnswer) {
+                    newPlayer.score += 10;
+                    io.to(pin).emit('answerResult', { isCorrect: true, score: newPlayer.score });
+                  } else {
+                    io.to(pin).emit('answerResult', { isCorrect: false, score: newPlayer.score });
+                  }
+                }
+
+                await newPlayer.save();
+              });
+            }
+
+            await newPlayer.save();
+          }
+        }
+      } catch (err) {
+        console.error(err);
       }
-  
-      // Kiểm tra xem tên người chơi đã tồn tại trong phòng chưa
-      if (players[room].includes(playerName)) {
-        socket.emit('joinError', 'Tên người chơi đã tồn tại trong phòng');
-        console.log('Tên người chơi đã tồn tại trong phòng');
-        return;
-      }
-  
-      // Thêm người chơi vào danh sách và gửi thông báo cho tất cả các client trong phòng
-      players[room].push(playerName);
-      socket.join(room);
-      io.to(room).emit('updatePlayers', players[room]);
-      socket.emit('joinSuccess');
-      console.log(`${playerName} has joined in ${room}`);
     });
-  
-    // Xử lý sự kiện khi một người chơi rời khỏi phòng
-    socket.on('leave', function(room, playerName) {
-      // Kiểm tra xem phòng có tồn tại không
-      if (!players[room]) {
-        return;
-      }
-  
-      // Xóa người chơi khỏi danh sách và gửi thông báo cho tất cả các client trong phòng
-      var index = players[room].indexOf(playerName);
-      if (index !== -1) {
-        players[room].splice(index, 1);
-      }
-      socket.leave(room);
-      io.to(room).emit('updatePlayers', players[room]);
+
+    socket.on('stopQuiz', () => {
+      clearInterval(intervalId);
+      scoreTable();
     });
-  
+
+    const scoreTable = async () => {
+      const result = await roomModel.findOne({ pin: roomPin }).populate('players');
+      const score = result.players.map((player) => {
+        return { name: player.name, score: player.score };
+      });
+      io.to(roomPin).emit('score', score);
+    };
+
     // Xử lý sự kiện khi một người chơi ngắt kết nối
-    socket.on('disconnect', function() {
+    socket.on('clientDisconnect', function () {
       console.log('A client disconnected');
+      socket.leave(roomPin);
+      clearInterval(intervalId);
     });
   });
-}
+};
 
-module.exports = socketApi
+module.exports = socketApi;

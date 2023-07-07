@@ -1,12 +1,44 @@
-import { Carousel, Button, Input, Form, Typography, Col, Row } from 'antd';
-
-import './index.css';
+import { Carousel, Button, Input, Form, Typography, Col, Row, message } from 'antd';
 import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import withAuth from '~/redux/withAuth';
 
+import './index.css';
+import { register } from '~/redux/actions';
+import { selectMessage } from '~/redux/selectors';
+
 const HomePage = () => {
+  const dispatch = useDispatch();
+  const messageNotificaiton = useSelector(selectMessage);
   // const [open, setOpen] = useState(false);
+  const validatePassword = ({ getFieldValue }) => ({
+    validator(_, value) {
+      if (value && value.length >= 8 && getFieldValue('password') === value) {
+        return Promise.resolve();
+      }
+      if (value && value.length >= 8) {
+        return Promise.reject('The two passwords you entered do not match!');
+      }
+      return Promise.reject('Password must be at least 8 characters');
+    },
+  });
+
+  const handleSubmit = async (val) => {
+    try {
+      const dispatchResult = await dispatch(register(val));
+
+      if (!dispatchResult) {
+        message.error(`${messageNotificaiton}`);
+      } else {
+        await message.success('Register successful');
+        await message.success('Login successful');
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      message.error(error);
+    }
+  };
 
   return (
     <React.Fragment>
@@ -66,21 +98,61 @@ const HomePage = () => {
             style={{
               height: 'fit-content',
             }}
+            onFinish={handleSubmit}
           >
             <Typography.Title className="home--signUpForm-title">Sign Up to create your free Game</Typography.Title>
-            <Form.Item>
-              <Input placeHolder={'First name'} className="home--signUpForm__input" />
+            <Form.Item
+              rules={[
+                {
+                  required: true,
+                  message: 'Please enter your name',
+                },
+              ]}
+              name="name"
+            >
+              <Input placeHolder={'Enter your name'} className="home--signUpForm__input" />
             </Form.Item>
-            <Form.Item>
-              <Input placeHolder={'Last name'} className="home--signUpForm__input" />
+            <Form.Item
+              rules={[
+                {
+                  required: true,
+                  type: 'email',
+                  message: 'Please enter valid email',
+                },
+              ]}
+              name="email"
+            >
+              <Input placeHolder={'Enter your email'} className="home--signUpForm__input" />
             </Form.Item>
-            <Form.Item>
-              <Input placeHolder={'Email address'} className="home--signUpForm__input" />
+            <Form.Item
+              rules={[
+                {
+                  required: true,
+                  message: 'Please enter your password',
+                },
+                validatePassword,
+              ]}
+              name="password"
+            >
+              <Input.Password placeHolder={'Enter your password'} className="home--signUpForm__input" />
             </Form.Item>
-            <Form.Item>
-              <Input placeHolder={'Phone number'} className="home--signUpForm__input" />
+            <Form.Item
+              rules={[
+                {
+                  required: true,
+                  message: 'Please enter your password',
+                },
+                validatePassword,
+              ]}
+              name="confirmPassword"
+              dependencies={['password']}
+              hasFeedback
+            >
+              <Input.Password placeHolder={'Enter password again'} className="home--signUpForm__input" />
             </Form.Item>
-            <Button className="home--signUpForm__btn">Sign Up Now</Button>
+            <Button className="home--signUpForm__btn" type="primary" htmlType="submit" block>
+              Sign Up Now
+            </Button>
             <br />
             <Typography.Text className="home--signUpForm__privacy">
               Your information will not be shared with anyone <Link>(See Privacy policy)</Link>

@@ -1,12 +1,11 @@
 import React from 'react';
-import './index.css';
 import { Image, Input, Button } from 'antd';
 
+import './index.css';
 import EnterBackground from '~/assets/imgs/Enter.jpg';
 import logo from '~/assets/imgs/logo.png';
 
 const JoinGame = () => {
-  console.log(EnterBackground);
   return (
     <React.Fragment>
       <div

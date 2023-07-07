@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Menu, Image, Button, Typography, Layout } from 'antd';
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -63,7 +63,9 @@ function NavbarTop() {
         </Button>
       ) : (
         <>
-          <Button onClick={handleClick}>CREATE ROOM</Button>
+          <Button type="primary" onClick={handleClick}>
+            ROOM
+          </Button>
           <UserIcon userProfile={userProfile} />
         </>
       )}

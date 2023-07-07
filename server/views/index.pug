@@ -1,0 +1,31 @@
+extends layout
+
+block content
+  h1 Socket.io Example
+  form#joinRoomForm
+    input#roomId(type='text', name='roomId', placeholder='Enter Room ID')
+    input#playerName(type='text', name='playerName', placeholder='Enter Player Name')
+    button(type='submit') Join Room
+
+  script.
+    const socket = io();
+    const joinRoomForm = document.querySelector('#joinRoomForm');
+    const roomIdInput = document.querySelector('#roomId');
+    const playerNameInput = document.querySelector('#playerName');
+
+    joinRoomForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const roomId = roomIdInput.value.trim();
+      const playerName = playerNameInput.value.trim();
+      if (roomId && playerName) {
+        socket.emit('joinRoom', { roomId, playerName });
+      }
+    });
+
+    socket.on('roomNotFound', () => {
+      console.log('Room not found');
+    });
+
+    socket.on('updatePlayers', (players) => {
+      console.log('Updated players:', players);
+    });

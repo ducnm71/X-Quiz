@@ -1,0 +1,32 @@
+.player-container {
+  width: 100vw;
+  height: 100vh;
+  background-size: 100% 100%;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif,
+    'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+}
+
+.title-question-0 {
+  background-color: #ff1780;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+.title-question-1 {
+  background-color: #9054fb;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+.title-question-2 {
+  background-color: #ffc000;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+.title-question-3 {
+  background-color: #00d7e9;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+
+
+.selected-answer {
+  background-color: antiquewhite;
+}
