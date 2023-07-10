@@ -41,14 +41,5 @@ const play = asyncHandler(async(req, res) => {
   }
 })
 
-const leave = asyncHandler(async(req, res) => {
-  const player = await playerModel.findByIdAndDelete(req.params.playerId)
-  console.log(player);
-  const checkRoom = await roomModel.findById(req.params.roomId)
-  checkRoom.players = checkRoom.players.filter((id) => id != req.params.playerId)
-  await checkRoom.save()
-  res.status(200).json(checkRoom.players)
-})
-
-module.exports = {joinRoom, play, leave};
+module.exports = {joinRoom, play};
 
