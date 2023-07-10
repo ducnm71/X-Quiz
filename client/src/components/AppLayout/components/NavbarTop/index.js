@@ -4,7 +4,8 @@ import { Link, useNavigate } from 'react-router-dom';
 
 import './style.css';
 import Logo from '~/assets/imgs/logo.png';
-import UserIcon from '~/components/User/UserIcon';
+// import UserIcon from '~/components/User/UserIcon';
+import UserIcon from '~/components/user/UserIcon';
 import { useSelector } from 'react-redux';
 import { selectAccessToken, selectProfile } from '~/redux/selectors';
 
