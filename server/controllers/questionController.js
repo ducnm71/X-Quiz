@@ -13,7 +13,7 @@ const checkQues = (arr, input) => {
 };
 
 const addQuestion = asyncHandler(async (req, res) => {
-  const { title, description, options, correctAnswer } = req.body;
+  const { title, description, options, correctAnswer, explain } = req.body;
   const roomId = req.params.id;
   const checkRoom = await roomModel.findById(roomId).populate('questions');
   const check = checkQues(checkRoom.questions, title);
@@ -22,7 +22,7 @@ const addQuestion = asyncHandler(async (req, res) => {
     res.status(400);
     throw new Error('Question already exists');
   } else {
-    const newQuestion = await questionSchema.create({ title, description, options, correctAnswer });
+    const newQuestion = await questionSchema.create({ title, description, options, correctAnswer, explain });
     if (newQuestion) {
       checkRoom.questions.push(newQuestion._id);
       await checkRoom.save();
@@ -45,6 +45,23 @@ const getQuestions = asyncHandler(async (req, res) => {
   }
 });
 
+const updateQuestion = asyncHandler(async(req, res) => {
+  const question = await questionSchema.findById(req.params.id)
+  if(!question){
+    res.status(400)
+    throw new Error('Question not found!')
+  }
+  const { title, description, options, correctAnswer, explain } = req.body;
+  question.title = title || question.title
+  question.description = description || question.description
+  question.options = options || question.options
+  question.correctAnswer = correctAnswer || question.correctAnswer
+  question.explain = explain || question.explain
+
+  await question.save()
+  res.status(200).json(question)
+})
+
 const deleteQuestion = asyncHandler(async (req, res) => {
   const question = await questionSchema.findByIdAndDelete(req.params.quesId);
   const room = await roomModel.findById(req.params.roomId);
@@ -60,4 +77,4 @@ const deleteQuestion = asyncHandler(async (req, res) => {
   }
 });
 
-module.exports = { addQuestion, getQuestions, deleteQuestion };
+module.exports = { addQuestion, getQuestions, updateQuestion ,deleteQuestion };

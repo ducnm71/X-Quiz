@@ -68,3 +68,75 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+
+X-QUIZ features
+Quản lý và tài khoản người dùng:
+
+Đăng kí đăng nhập
+Đặt lại mật khẩu / Khôi phục tài khoản
+Tạo và sửa đổi hồ sơ người dùng
+Xóa tài khoản
+
+Tạo và quản lý bài kiểm tra:
+
+Khả năng tạo, chỉnh sửa, xóa câu đố
+Các câu hỏi có thể là Nhiều lựa chọn, Đúng/Sai, Điền vào chỗ trống
+Hỗ trợ Đa phương tiện: Hình ảnh, Video, Âm thanh
+Hẹn giờ cho mỗi câu hỏi
+Hệ thống chấm điểm và xếp hạng tự động
+Tùy chọn ngẫu nhiên hóa câu hỏi và câu trả lời
+
+Lưu trữ bài kiểm tra:
+
+Lưu trữ bài kiểm tra trực tiếp
+Tùy chọn câu hỏi không đồng bộ/tự nhịp độ
+Liên kết bài kiểm tra riêng tư/công khai
+
+Tương tác của người tham gia:
+
+Khả năng tham gia Câu đố bằng Mã duy nhất
+Khả năng Tham gia Quiz bằng cách quét mã QR
+Tham gia câu đố thời gian thực
+Hiển thị bảng xếp hạng
+Khả năng xem lại câu trả lời Bài kiểm tra
+
+
+Phân tích & Báo cáo:
+
+Báo cáo hiệu suất chi tiết cho từng người tham gia
+Báo cáo tóm tắt bài kiểm tra
+Xuất báo cáo ở định dạng CSV/Excel
+
+Hội nhập:
+Chia sẻ mạng xã hội
+
+Ngăn xếp công nghệ:
+
+Sử dụng MongoDB cho cơ sở dữ liệu
+Express.js cho khung phụ trợ
+React.js cho giao diện người dùng
+Node.js cho nền tảng máy chủ
+II. Yêu cầu kiếm tiền và bán hàng:
+
+Bậc giá:
+
+Bậc miễn phí (Tính năng hạn chế)
+Đăng ký hàng tháng
+Đăng ký hàng năm
+Đăng ký trọn đời
+
+Quản lý đăng ký:
+
+Khả năng nâng cấp, hạ cấp, hủy đăng ký
+Hiển thị chi tiết đăng ký hiện tại
+
+Yêu cầu giao dịch trọn đời:
+
+Khả năng tạo mã phiếu giảm giá trọn đời duy nhất
+Tùy chọn đổi mã phiếu giảm giá khi mua hàng
+Khả năng giới hạn số lần quy đổi cho mã phiếu giảm giá
+
+Hệ thống thanh toán:
+
+Hỗ trợ nhiều cổng thanh toán (Tích hợp với Chargebee)

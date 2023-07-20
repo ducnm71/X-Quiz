@@ -23,12 +23,15 @@ const questionSchema = new schema(
       required: true,
     },
     options: {
-      type: [{ type: String, required: true }],
-      validate: [arrLimit, '{PATH} must have exactly 4 elements'],
+      type: [{ type: String}],
+      // validate: [arrLimit, '{PATH} must have exactly 4 elements'],
     },
     correctAnswer: {
-      type: Number,
+      type: String,
       required: true,
+    },
+    explain: {
+      type: String
     },
     roomId: { type: mongoose.Schema.Types.ObjectId, ref: 'Room' },
   },
